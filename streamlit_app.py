@@ -8,13 +8,13 @@ import streamlit as st
 
 # read data
 # df_pararius
-df_pararius = pd.read_csv('data/processed/df_coo_pararius.csv', index_col=[0])
+df_pararius = pd.read_csv('df_coo_pararius.csv', index_col=[0])
 df_pararius = df_pararius[df_pararius['date'] ==
                           df_pararius['date'].max()].fillna(0).reset_index(drop=True)
 df_pararius = df_pararius.drop_duplicates(subset=['irl'])
 df_pararius['price'] = df_pararius['price'].astype(float)
 # yelp
-yelp = pd.read_csv('data/processed/yelp.csv', index_col=[0])
+yelp = pd.read_csv('yelp.csv', index_col=[0])
 
 # create streamlit page
 st.set_page_config(layout="wide")

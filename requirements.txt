@@ -8,3 +8,4 @@ pandas-bokeh==0.5
 chart-studio==1.1.0
 Fiona==1.8.4
 widgetsnbextension==3.5.1
+openpyxl==3.0.7

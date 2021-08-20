@@ -48,7 +48,7 @@ price_selected = st.sidebar.slider(
 max_area = int(df_pararius['Living area'].max())
 min_area = int(df_pararius['Living area'].min())
 area_selected = st.sidebar.slider(
-    'Select Area', min_area, max_area, (min_area, max_area))
+    'Select Area', min_area, max_area, (50, max_area))
 
 # Filter for interior
 if st.sidebar.button('Add all interior'):

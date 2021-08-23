@@ -96,9 +96,6 @@ good = df_pararius[(df_pararius.index >= index_selected[0])
 pararius = folium.Map([52.0799838, 4.3113461],
                       zoom_start=12, tiles="cartodbdark_matter")
 
-# add data to map
-#FastMarkerCluster(data=locations, name='good', callback=callback,show=True, tooltip='tooltip').add_to(pararius)
-
 callback = ('function (row) {'
             "var marker = L.marker(new L.LatLng(row[0], row[1]), {color: 'blue'});"
             "var popup = L.popup({maxWidth: '300'});"
@@ -107,12 +104,14 @@ callback = ('function (row) {'
             "const area = {text: row[4]};"
             "const rooms = {text: row[5]};"
             "const garden = {text: row[6]};"
-            "const index_ = {text: row[7]};"
+            "const index = {text: row[7]};"
+            "const img = {text: row[8]};"
+
             "var mytext = $(`\
                             <div id='mytext' class='display_text' style='width: 100.0%; height: 100.0%;'>\
-                                <img src='https://www.publicdomainpictures.net/pictures/320000/velka/background-image.png' title='titulo' width='200' height='100'/>\
+                                <img src=${img.text} title='titulo' width='200' height='100'/>\
                                 <br>\
-                                Index - ${index_.text}<br>\
+                                Index - ${index.text}<br>\
                                 Price - € ${display_text_price.text}<br>\
                                 Area - ${area.text} m² <br>\
                                 Rooms - ${rooms.text}<br>\
@@ -131,8 +130,11 @@ irl = good['irl'].tolist()
 area = good['Living area'].tolist()
 rooms = good['Rooms'].tolist()
 garden = good['garden area'].tolist()
-index = good['garden area'].index.tolist()
-locations = list(zip(lats, lons, price, irl, area, rooms, garden, index))
+index = good.index.tolist()
+image = good['image'].tolist()
+
+locations = list(zip(lats, lons, price, irl, area,
+                 rooms, garden, index, image))
 
 # add data to map
 FastMarkerCluster(data=locations, name='good', callback=callback,

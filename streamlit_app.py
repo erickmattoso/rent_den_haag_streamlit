@@ -147,7 +147,7 @@ folium.LayerControl().add_to(pararius)
 st.write(pararius)
 
 # plot data on streamlit
-good_ = good[['price', 'link', 'agency', 'Living area',
+good_ = good[['img', 'price', 'link', 'agency', 'Living area',
               'Rooms', 'garden area']].to_html(escape=False)
 
 # prepare to download

@@ -95,6 +95,10 @@ good = df_pararius[(df_pararius.index >= index_selected[0])
 # MAP
 pararius = folium.Map([52.0799838, 4.3113461],
                       zoom_start=12, tiles="cartodbdark_matter")
+
+# add data to map
+#FastMarkerCluster(data=locations, name='good', callback=callback,show=True, tooltip='tooltip').add_to(pararius)
+
 callback = ('function (row) {'
             "var marker = L.marker(new L.LatLng(row[0], row[1]), {color: 'blue'});"
             "var popup = L.popup({maxWidth: '300'});"

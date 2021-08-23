@@ -9,17 +9,12 @@ import streamlit as st
 # read data
 # df_pararius
 df_pararius = pd.read_csv('df_coo_pararius.csv', index_col=[0])
-df_pararius = df_pararius[df_pararius['date'] ==
-                          df_pararius['date'].max()].fillna(0).reset_index(drop=True)
-df_pararius = df_pararius.drop_duplicates(subset=['irl'])
-df_pararius['price'] = df_pararius['price'].astype(float)
+
 # yelp
-yelp = pd.read_csv('yelp.csv', index_col=[0])
+#yelp = pd.read_csv('yelp.csv', index_col=[0])
 
 # create streamlit page
 st.set_page_config(layout="wide")
-st.title("Places to rent in Den Haag, NL")
-
 # config streamlit layout
 hide_streamlit_style = """
 <style>
@@ -27,39 +22,47 @@ hide_streamlit_style = """
 footer {visibility: hidden;}
 .css-1y0tads {padding-top: 0rem;}
 .css-hby737 {padding: 1rem 1rem;}
+.css-ijjfg8 {width: 25px;}
 </style
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-# create deal
-df_pararius['deal'] = 100 * (df_pararius['Living area'] + df_pararius['Rooms'] +
-                             df_pararius['garden area']) / df_pararius['price']
+st.title("Places to rent in The Netherlands")
 
 # create filter on sidebar
+city = st.sidebar.multiselect("City", options=list(
+    df_pararius['city'].unique()), default=['Den Haag'])
+
+# apply filter
+df_pararius = df_pararius[df_pararius['city'].isin(city)]
+
 # Filter for price
 max_price = int(df_pararius['price'].max())
 min_price = int(df_pararius['price'].min())
-price_selected = st.sidebar.slider(
-    'Select Price', min_price, max_price, (min_price, 1400))
-# st.sidebar.number_input('value')
+col1, col2 = st.sidebar.columns(2)
+price_selected_0 = col1.number_input(
+    'Price (Min)', min_value=0, max_value=max_price, value=0)
+price_selected_1 = col2.number_input(
+    'Price (Max)', min_value=0, max_value=max_price, value=1100)
+price_selected = [price_selected_0, price_selected_1]
 
 # Filter for area
 max_area = int(df_pararius['Living area'].max())
 min_area = int(df_pararius['Living area'].min())
 area_selected = st.sidebar.slider(
-    'Select Area', min_area, max_area, (50, max_area))
+    'Total Area', min_area, max_area, (min_area, max_area))
 
 # Filter for interior
-if st.sidebar.button('Add all interior'):
-    interior_selected = st.sidebar.multiselect("Interior", options=list(
-        df_pararius['interior'].unique()), default=list(df_pararius['interior'].unique()))
-else:
-    interior_selected = st.sidebar.multiselect("Interior", options=list(
+my_expander = st.sidebar.expander(label='Advanced Filters')
+with my_expander:
+    interior_selected = st.multiselect("Interior", options=list(
         df_pararius['interior'].unique()), default=['Furnished'])
+    status_selected = st.multiselect("status", options=list(
+        df_pararius['status'].unique()), default=list(df_pararius['status'].unique()))
 
 # organize filter
-filter_ = (df_pararius['interior'].isin(interior_selected)) & \
+filter_ = \
+    (df_pararius['interior'].isin(interior_selected)) & \
+    (df_pararius['status'].isin(status_selected)) & \
     (df_pararius['price'] >= price_selected[0]) & \
     (df_pararius['price'] <= price_selected[1]) & \
     (df_pararius['Living area'] >= area_selected[0]) & \
@@ -67,10 +70,6 @@ filter_ = (df_pararius['interior'].isin(interior_selected)) & \
 
 # apply filter
 df_pararius = df_pararius[filter_]
-
-# Now calculate best deal
-df_pararius['deal'] = 100 * (df_pararius['Living area'] + df_pararius['Rooms'] +
-                             df_pararius['garden area']) / df_pararius['price']
 
 # define order of best deal
 df_pararius = df_pararius.sort_values(
@@ -80,7 +79,7 @@ df_pararius = df_pararius.sort_values(
 max_val = int(df_pararius.index.max())
 min_val = int(df_pararius.index.min())
 index_selected = st.sidebar.slider(
-    'Select Index', min_val, max_val, (min_val, 20))
+    'Amout houses', min_val, max_val, (min_val, 10))
 
 # apply filter
 good = df_pararius[(df_pararius.index >= index_selected[0])
@@ -133,11 +132,6 @@ folium.LayerControl().add_to(pararius)
 
 # plot map on streamlit
 st.write(pararius)
-
-# prepare link on streamlit
-good['url'] = 'https://www.pararius.com' + good['irl']
-good['link'] = "<a target='_blank' href=" + \
-    (good['url']).astype(str) + ">" + (good['street']).astype(str) + "</a>"
 
 # plot data on streamlit
 good_ = good[['price', 'link', 'agency', 'Living area',

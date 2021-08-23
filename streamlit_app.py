@@ -56,8 +56,12 @@ my_expander = st.sidebar.expander(label='Advanced Filters')
 with my_expander:
     interior_selected = st.multiselect("Interior", options=list(
         df_pararius['interior'].unique()), default=['Furnished'])
-    status_selected = st.multiselect("status", options=list(
+    status_selected = st.multiselect("Status", options=list(
         df_pararius['status'].unique()), default=list(df_pararius['status'].unique()))
+    max_room = int(df_pararius['Rooms'].max())
+    min_room = int(df_pararius['Rooms'].min())
+    room_selected = st.slider(
+        'Rooms', min_room, max_room, (min_room, max_room))
 
 # organize filter
 filter_ = \
@@ -66,7 +70,10 @@ filter_ = \
     (df_pararius['price'] >= price_selected[0]) & \
     (df_pararius['price'] <= price_selected[1]) & \
     (df_pararius['Living area'] >= area_selected[0]) & \
-    (df_pararius['Living area'] <= area_selected[1])
+    (df_pararius['Living area'] <= area_selected[1]) & \
+    (df_pararius['Rooms'] >= room_selected[0]) & \
+    (df_pararius['Rooms'] <= room_selected[1])
+
 
 # apply filter
 df_pararius = df_pararius[filter_]

@@ -109,7 +109,7 @@ callback = ('function (row) {'
 
             "var mytext = $(`\
                             <div id='mytext' class='display_text' style='width: 100.0%; height: 100.0%;'>\
-                                <img src=${img.text} title='titulo' width='200' height='100'/>\
+                                <img src=${img.text} title='titulo' width='150' height='100'/>\
                                 <br>\
                                 Index - ${index.text}<br>\
                                 Price - € ${display_text_price.text}<br>\

@@ -29,11 +29,11 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 st.title("Places to rent in The Netherlands")
 
 # create filter on sidebar
-city = st.sidebar.multiselect("City", options=list(
-    df_pararius['city'].unique()), default=['Den Haag'])
+Plaats = st.sidebar.multiselect("Plaats", options=list(
+    df_pararius['Plaats'].unique()), default=['Den Haag', "'s-Gravenhage"])
 
 # apply filter
-df_pararius = df_pararius[df_pararius['city'].isin(city)]
+df_pararius = df_pararius[df_pararius['Plaats'].isin(Plaats)]
 
 # Filter for price
 max_price = int(df_pararius['price'].max())

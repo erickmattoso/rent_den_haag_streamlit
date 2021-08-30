@@ -40,9 +40,9 @@ max_price = int(df_pararius['price'].max())
 min_price = int(df_pararius['price'].min())
 col1, col2 = st.sidebar.columns(2)
 price_selected_0 = col1.number_input(
-    'Price (Min)', min_value=0, max_value=max_price, value=0)
+    'Price (Min)', min_value=0, max_value=max_price, value=0, step=50)
 price_selected_1 = col2.number_input(
-    'Price (Max)', min_value=0, max_value=max_price, value=1100)
+    'Price (Max)', min_value=0, max_value=max_price, value=1300, step=50)
 price_selected = [price_selected_0, price_selected_1]
 
 # Filter for area

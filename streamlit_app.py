@@ -16,16 +16,7 @@ df_pararius = pd.read_csv('df_coo_pararius.csv', index_col=[0])
 # create streamlit page
 st.set_page_config(layout="wide")
 # config streamlit layout
-hide_streamlit_style = """
-<style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-.css-1y0tads {padding-top: 0rem;}
-.css-hby737 {padding: 1rem 1rem;}
-.css-ijjfg8 {width: 25px;}
-</style
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 st.title("Places to rent in The Netherlands")
 
 # create filter on sidebar

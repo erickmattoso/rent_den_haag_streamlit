@@ -7,11 +7,12 @@ import pandas as pd
 import streamlit as st
 
 # read data
-# df_pararius
 df_pararius = pd.read_csv('df_coo_pararius2.csv', index_col=[0])
+
 
 # create streamlit page
 st.set_page_config(layout="wide")
+
 # config streamlit layout
 hide_streamlit_style = """
 <style>
@@ -71,7 +72,6 @@ filter_ = \
     (df_pararius['number-of-rooms'] >= room_selected[0]) & \
     (df_pararius['number-of-rooms'] <= room_selected[1])
 
-
 # apply filter
 df_pararius = df_pararius[filter_]
 
@@ -90,8 +90,12 @@ good = df_pararius[(df_pararius.index >= index_selected[0])
                    & (df_pararius.index <= index_selected[1])]
 
 # MAP
-pararius = folium.Map([52.0799838, 4.3113461],
-                      zoom_start=12, tiles="cartodbdark_matter")
+pararius = folium.Map([52.2129919, 5.2793703], tiles="cartodbdark_matter")
+
+# add zoom
+sw = good[['latitude', 'longitude']].min().values.tolist()
+ne = good[['latitude', 'longitude']].max().values.tolist()
+pararius.fit_bounds([sw, ne])
 
 callback = ('function (row) {'
             "var marker = L.marker(new L.LatLng(row[0], row[1]), {color: 'blue'});"
@@ -106,7 +110,7 @@ callback = ('function (row) {'
 
             "var mytext = $(`\
                             <div id='mytext' class='display_text' style='width: 100.0%; height: 100.0%;'>\
-                                <img src=${img.text} title='titulo' width='150' height='100'/>\
+                                <img src=${img.text} title='house' width='150' height='100'/>\
                                 <br>\
                                 Index - ${index.text}<br>\
                                 Price - € ${display_text_price.text}<br>\
@@ -118,6 +122,7 @@ callback = ('function (row) {'
             "popup.setContent(mytext);"
             "marker.bindPopup(popup);"
             'return marker};')
+
 # prepare data to map
 lats = good['latitude'].tolist()
 lons = good['longitude'].tolist()
@@ -144,8 +149,8 @@ folium.LayerControl().add_to(pararius)
 st.write(pararius)
 
 # plot data on streamlit
-good_ = good[['img', 'price', 'link', 'agency', 'surface-area',
-              'number-of-rooms', 'garden-surface-area']].to_html(escape=False)
+good_ = good[['img', 'price', 'link', 'agency', 'surface-area', 'number-of-rooms',
+              'garden-surface-area', 'Offered since', 'Available']].to_html(escape=False)
 
 # prepare to download
 towrite = io.BytesIO()

@@ -1,14 +1,22 @@
 # Import Libs
+from datetime import date
+import datetime as dt
 import io
 import base64
 from folium.plugins import FastMarkerCluster, HeatMap
 import folium
 import pandas as pd
 import streamlit as st
+from datetime import datetime, timedelta
+import streamlit as st
+import datetime as dt
+import pandas as pd
+from dateutil.relativedelta import relativedelta  # to add days or years
+import datetime
+
 
 # read data
 df_pararius = pd.read_csv('df_coo_pararius2.csv', index_col=[0])
-
 
 # create streamlit page
 st.set_page_config(layout="wide")
@@ -28,7 +36,7 @@ st.title("Places to rent in The Netherlands")
 
 # create filter on sidebar
 Plaats = st.sidebar.multiselect('Plaats', options=list(
-    df_pararius['Plaats'].unique()), default=['Den Haag'])
+    df_pararius['Plaats'].unique()), default=['Rotterdam'])
 
 # apply filter
 df_pararius = df_pararius[df_pararius['Plaats'].isin(Plaats)]
@@ -48,6 +56,14 @@ max_area = int(df_pararius['surface-area'].max())
 min_area = int(df_pararius['surface-area'].min())
 area_selected = st.sidebar.slider(
     'Total Area', min_area, max_area, (45, max_area))
+
+validate = st.sidebar.slider('Cost of living', 0, 1000, (0, 500))
+
+####### Date #######
+today = date.today()
+end_date = today + datetime.timedelta(days=365)
+d1 = st.sidebar.date_input("Available", [today, end_date])
+d2 = st.sidebar.date_input("Offered since", [today, end_date])
 
 # Filter for interior
 my_expander = st.sidebar.expander(label='Advanced Filters')
@@ -88,14 +104,6 @@ index_selected = st.sidebar.slider(
 # apply filter
 good = df_pararius[(df_pararius.index >= index_selected[0])
                    & (df_pararius.index <= index_selected[1])]
-
-# MAP
-pararius = folium.Map([52.2129919, 5.2793703], tiles="cartodbdark_matter")
-
-# add zoom
-sw = good[['latitude', 'longitude']].min().values.tolist()
-ne = good[['latitude', 'longitude']].max().values.tolist()
-pararius.fit_bounds([sw, ne])
 
 callback = ('function (row) {'
             "var marker = L.marker(new L.LatLng(row[0], row[1]), {color: 'blue'});"
@@ -138,28 +146,56 @@ image = good['image'].tolist()
 locations = list(zip(lats, lons, price, irl, area,
                  rooms, garden, index, image))
 
+# MAP
+OP = [51.9071833, 4.4728155]
+pararius = folium.Map(OP, tiles="cartodbdark_matter")
+# add zoom
+sw = good[['latitude', 'longitude']].min().values.tolist()
+ne = good[['latitude', 'longitude']].max().values.tolist()
+pararius.fit_bounds([sw, ne])
 # add data to map
 FastMarkerCluster(data=locations, name='good', callback=callback,
                   show=True, tooltip='tooltip').add_to(pararius)
-HeatMap(good[['latitude', 'longitude', 'deal']].values.tolist(),
-        name='good HeatMap', show=False).add_to(pararius)
+# HeatMap(good[['latitude', 'longitude', 'deal']].values.tolist(),name='good HeatMap', show=False).add_to(pararius)
+icon_url = 'https://media-exp1.licdn.com/dms/image/C4D0BAQHSDPW5wBr9eA/company-logo_200_200/0/1623138109412?e=2159024400&v=beta&t=XM6Umkb8JZ6XNliPWZzaNxjLgkL8BCv8newgm3VvTx8'
+icon = folium.features.CustomIcon(icon_url, icon_size=(28, 30))
+folium.Marker(location=OP, icon=icon).add_to(pararius)
 folium.LayerControl().add_to(pararius)
 
 # plot map on streamlit
 st.write(pararius)
 
 # plot data on streamlit
-good_ = good[['img', 'price', 'link', 'agency', 'surface-area', 'number-of-rooms',
-              'garden-surface-area', 'Offered since', 'Available']].to_html(escape=False)
+good_ = good[[
+    'img',
+    'price',
+    'Plaats',
+    'surface-area',
+    'number-of-rooms',
+    'garden-surface-area',
+    'Offered since',
+    'Available',
+]].rename(columns={
+    'img': 'Add',
+    'price': 'Price',
+    'Plaats': 'City',
+    'surface-area': 'Area',
+    'number-of-rooms': 'Rooms',
+    'garden-surface-area': 'Garden',
+    'Offered since': 'Offered',
+    'Available': 'Available',
+}).to_html(escape=False)
 
+# good_ = good[['img', 'price', 'link', 'agency', 'surface-area', 'number-of-rooms','garden-surface-area', 'Offered since', 'Available']].to_html(escape=False)
 # prepare to download
-towrite = io.BytesIO()
-downloaded_file = good[["url", "price", "address", "street", "agency", "date"]].to_excel(
-    towrite, encoding='utf-8', index=False, header=True)
-towrite.seek(0)  # reset pointer
-b64 = base64.b64encode(towrite.read()).decode()  # some strings
-linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="rents_denhaag.xlsx">Download excel file</a>'
-st.text(" \n")
-st.markdown(linko, unsafe_allow_html=True)
+# towrite = io.BytesIO()
+# downloaded_file = good[["url", "price", "address", "street", "agency", "date"]].to_excel(
+#     towrite, encoding='utf-8', index=False, header=True)
+# towrite.seek(0)  # reset pointer
+# b64 = base64.b64encode(towrite.read()).decode()  # some strings
+# linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="rents_denhaag.xlsx">Download excel file</a>'
+# st.text(" \n")
+#st.markdown(linko, unsafe_allow_html=True)
+
 st.text(" \n")
 st.write(good_, unsafe_allow_html=True)

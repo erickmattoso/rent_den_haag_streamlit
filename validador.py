@@ -9,7 +9,7 @@ import streamlit as st
 
 def main():
     # create streamlit page
-    st.set_page_config(layout="wide")
+    st.set_page_config(layout='wide')
 
     # config streamlit layout
     hide_streamlit_style = """
@@ -22,63 +22,43 @@ def main():
     </style
     """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
     pages = {
-        "Costs of Living": page_settings,
-        "Houses": op,
+        'Costs of Living': page_settings,
+        'Houses': obvious_people,
     }
 
-    if "page" not in st.session_state:
+    if 'page' not in st.session_state:
         st.session_state.update({
             # Default page
-            "page": "Home",
+            'page': 'Home',
 
             # Radio, selectbox and multiselect options
-            "options": ["Hello", "Everyone", "Sales Force", "Obvious People"],
+            'options1': ['Hello', 'Everyone', 'Sales Force', 'Obvious People'],
+            'options2': ['A', 'B', 'C', 'D'],
 
             # Default widget values
-            "text": "",
-            "slider": 0,
-            "checkbox": False,
-            "radio": "Hello",
-            "selectbox": "Obvious People",
-            "multiselect": ["Hello", "Everyone"],
+            'number_default_1': 1,
+            'number_default_2': 0,
+            'options_default_1': 'Obvious People',
+            'options_default_2': 'C',
         })
 
     with st.sidebar:
-        page = st.radio("Select your page", tuple(pages.keys()))
-
+        page = st.radio('Select your page', tuple(pages.keys()))
     pages[page]()
 
 
 def page_settings():
-    st.title("Costs of Living")
-    st.text_input("Input", key="text")
-    st.slider("Slider", 0, 10, key="slider")
-    st.checkbox("Checkbox", key="checkbox")
-    st.radio("Radio", st.session_state["options"], key="radio")
-    st.selectbox("Selectbox", st.session_state["options"], key="selectbox")
-    st.multiselect(
-        "Multiselect", st.session_state["options"], key="multiselect")
-    ##########################################
-    st.title("Costs of Living 2")
+    st.title('Costs of Living')
     row1, row2 = st.columns(2)
-    row1.number_input(f'Family:', step=1)
-    row2.number_input(f'Children in School:', step=1)
-    row1.selectbox(f'Dinner in restaurants:', st.session_state['options'])
-    row2.selectbox(f'Food type:', st.session_state['options'])
-    row1.selectbox(f'Expensive Restaurants:', st.session_state['options'])
-    row2.selectbox(f'Coffee outside:', st.session_state['options'])
-    row1.selectbox(f'Driving car:', st.session_state['options'])
-    row2.selectbox(f'Taking Taxi:', st.session_state['options'])
-    row1.selectbox(f'Vacation and Travel:', st.session_state['options'])
-    row2.selectbox(f'Buying Clothing and Shoes:', st.session_state['options'])
-    row1.selectbox(f'Going out:', st.session_state['options'])
-    row2.selectbox(f'Alcoholic consume:', st.session_state['options'])
-    ##########################################
+    row1.number_input(f'Family:', step=1, key="number_default_1")
+    row2.number_input(f'Children in School:', step=1, key="number_default_2")
+    final = pd.read_csv('costs.csv', index_col=[0])
+    final_ = final.to_html(escape=False)
+    row1.write(final_, unsafe_allow_html=True)
 
 
-def op():
+def obvious_people():
     st.title("Places to rent in The Netherlands")
 
     # read data
@@ -166,8 +146,8 @@ def op():
         'Amout houses', min_val, max_val, (min_val, 10))
 
     # apply filter
-    good = df_pararius[(df_pararius.index >= index_selected[0])
-                       & (df_pararius.index <= index_selected[1])]
+    good = df_pararius[(df_pararius.index >= index_selected[0]) & (
+        df_pararius.index <= index_selected[1])]
 
     callback = ('function (row) {'
                 "var marker = L.marker(new L.LatLng(row[0], row[1]), {color: 'blue'});"
@@ -245,24 +225,15 @@ def op():
 
     # prepare to download
     towrite = io.BytesIO()
-    downloaded_file = good[['url', 'Price', 'address', 'street', 'agency', 'date']].to_excel(
+    good[['url', 'Price', 'address', 'street', 'agency', 'date']].to_excel(
         towrite, encoding='utf-8', index=False, header=True)
     towrite.seek(0)  # reset pointer
     b64 = base64.b64encode(towrite.read()).decode()  # some strings
-    linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="rents_denhaag.xlsx">Download excel file</a>'
+    linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="obvious_people_houses.xlsx">Download excel file</a>'
     st.text(" \n")
     st.markdown(linko, unsafe_allow_html=True)
     st.text(" \n")
     st.write(good_, unsafe_allow_html=True)
-
-    st.write(f"""
-    - **Input**: {st.session_state.text}
-    - **Slider**: `{st.session_state.slider}`
-    - **Checkbox**: `{st.session_state.checkbox}`
-    - **Radio**: {st.session_state.radio}
-    - **Selectbox**: {st.session_state.selectbox}
-    - **Multiselect**: {", ".join(st.session_state.multiselect)}
-    """)
 
 
 if __name__ == "__main__":

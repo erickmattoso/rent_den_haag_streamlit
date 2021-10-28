@@ -34,7 +34,7 @@ def page_settings():
     # Lorem
     @st.cache
     def fetch_and_clean_data1():
-        df = pd.read_csv('costs.csv')
+        df = pd.read_csv('costs.csv', index_col=[0])
         return df
     # Lorem
     final = fetch_and_clean_data1()
@@ -65,24 +65,24 @@ def page_settings():
     max_distance = int(final['distance'].max())
     min_distance = int(final['distance'].min())
     distance_selected = row2.slider(
-        'Total distance', min_distance, max_distance, (min_distance, max_distance))
+        'Distance from Obvious People', min_distance, max_distance, (min_distance, 23))
 
-    # price selected slider
-    max_price = int(final['price'].max())
-    min_price = int(final['price'].min())
-    price_selected = row2.slider(
-        'Total price', min_price, max_price, (min_price, max_price))
+    # cost selected slider
+    max_cost = int(final['cost'].max())
+    min_cost = int(final['cost'].min())
+    cost_selected = row2.slider(
+        'Cost of Living', min_cost, max_cost, (min_cost, max_cost))
 
     # filter
     filter_ = (final['distance'] >= distance_selected[0]) & (final['distance'] <= distance_selected[1]) & (
-        final['price'] >= price_selected[0]) & (final['price'] <= price_selected[1])
+        final['cost'] >= cost_selected[0]) & (final['cost'] <= cost_selected[1])
 
     # add filter
     final = final[filter_]
 
     # table
     st.session_state.display_table = True
-    t = display_table(final)
+    t = display_table(final.drop(columns=['latitude', 'longitude']))
 
     # Lorem
     ault = []
@@ -99,24 +99,24 @@ def page_settings():
         pass
 
     # Lorem
-    final = final.sort_values('price')
+    final = final.sort_values('cost')
     lats = final['latitude'].tolist()
     lons = final['longitude'].tolist()
     city = final['city'].tolist()
-    price = final['price'].tolist()
+    cost = final['cost'].tolist()
 
     # Lorem
     OP = [51.9071833, 4.4728155]
     map = folium.Map(OP, tiles='cartodbdark_matter')
-    color_pallete = (sns.color_palette("YlOrBr", len(price))).as_hex()
+    color_pallete = (sns.color_palette("YlOrBr", len(cost))).as_hex()
     feature_group = folium.FeatureGroup("Locations")
 
     # Lorem
     i = 0
-    for lats, lons, price, city in zip(lats, lons, price, city):
+    for lats, lons, cost, city in zip(lats, lons, cost, city):
         feature_group.add_child(folium.CircleMarker(
             location=[lats, lons],
-            popup=f"{city}, €{price}",
+            popup=f"{city}, €{cost}",
             radius=4,
             color=color_pallete[i],
             fill=True,

@@ -5,7 +5,8 @@ import base64
 import folium
 import io
 import pandas as pd
-import seaborn as sns
+#import seaborn as sns
+from matplotlib.colors import LinearSegmentedColormap
 import streamlit as st
 
 
@@ -108,7 +109,11 @@ def page_settings():
     # Lorem
     OP = [51.9071833, 4.4728155]
     map = folium.Map(OP, tiles='cartodbdark_matter')
-    color_pallete = (sns.color_palette("YlOrBr", len(price))).as_hex()
+    #color_pallete = (sns.color_palette("YlOrBr", len(price))).as_hex()
+
+    color_pallete = LinearSegmentedColormap.from_list(
+        'rg', ["r", "g"], N=len(price))
+
     feature_group = folium.FeatureGroup("Locations")
 
     # Lorem

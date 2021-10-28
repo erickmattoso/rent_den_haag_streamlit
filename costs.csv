@@ -19,7 +19,6 @@ Delft,Zuid-Holland,788.75,13.67,95060.0,"Delft,Ntelpht,dai er fu te,derufuto shi
 Rozenburg,Zuid-Holland,810.86,15.38,12420.0,None,51.90417,4.24861
 Maassluis,Zuid-Holland,814.02,15.39,32780.0,Maassluis,51.92333,4.25
 Moordrecht,Zuid-Holland,817.18,16.0,7932.0,None,51.9861,4.6681
-Berkenwoude,Zuid-Holland,829.81,16.6,1390.0,None,51.945,4.70694
 Zoetermeer,Zuid-Holland,839.29,16.77,115845.0,"Zeutermaer,Zoetermeer,zwtrmyyr,זוטרמייר",52.0575,4.49306
 Papendrecht,Zuid-Holland,838.03,16.96,31621.0,"Papendrekht,Papendrext,pa peng de lei he te,Папендрехт,Պապենդրեխտ,帕彭德雷赫特",51.83167,4.6875
 Dordrecht,Zuid-Holland,835.52,17.52,119260.0,"Doardt,Dordracum,Dordrech,Dordrecht,Dordrechtas,Dordrehta,Dordrehto,Dordreque,Dordreĥto,Dordt,Dort,Ntorntrecht,dorutorehito,Ντόρντρεχτ,ドルトレヒト",51.81,4.67361
@@ -74,7 +73,6 @@ Oudenbosch,Noord-Brabant,889.71,35.53,None,None,51.5892,4.5239
 Meerkerk,Zuid-Holland,887.1,35.79,3007.0,None,51.92,4.9942
 Noordwijk,Zuid-Holland,892.31,36.39,24363.0,Noordwijk,52.234,4.44474
 Benschop,Utrecht,892.68,36.48,None,None,52.00901,4.9789
-Kamerik,Utrecht,893.06,36.66,None,None,52.11127,4.89355
 Nieuwland,Utrecht,894.17,37.13,1400.0,None,51.90167,5.01389
 Steenbergen,Noord-Brabant,894.92,37.44,23582.0,Steenbergen,51.58417,4.31944
 Noorden,Zuid-Holland,895.85,37.65,None,None,52.16627,4.82709
@@ -95,12 +93,13 @@ Nieuw-Vennep,Noord-Holland,909.43,41.25,None,None,52.26475,4.63356
 Breda,Noord-Brabant,909.8,41.31,167673.0,"Breda,Breda khot,Brehda,Brenta,Brigita,Bréda,GLZ,be rda,beuleda,brda,brdh,breda,bryda,bu lei da,bureda,Μπρέντα,Бреда,Бреда хот,Брэда,Բրեդա,ברדה,بردا,بريدا,بریڈا,เบรดา,ბრედა,ブレダ,布雷达,브레다",51.58656,4.77596
 Roosendaal,Noord-Brabant,909.93,41.85,77725.0,"Roosendaal,Rosendael,Rozendael,Rozendal,Rozendal',ZYO,losendal,luo sen da er,ro sen dal,rozendaru,rwsyndal,Розендал,Розендаль,روزن‌دال,روسيندال,โรเซนดาล,ローゼンダール,罗森达尔,로센달",51.53083,4.46528
 's Gravenmoer,Noord-Brabant,910.16,42.62,2315.0,'s Gravemoer,51.65594,4.94076
+Mijdrecht,Utrecht,910.192,42.65,15230.0,"Mijdrecht,Mudrecht,Müdrecht",52.20667,4.8625
 De Meern,Utrecht,910.32,43.16,None,None,52.08118,5.03636
 Wouw,Noord-Brabant,910.42,43.24,4600.0,None,51.52167,4.39028
 Hillegom,Zuid-Holland,910.45,43.32,18419.0,Hillegom,52.29083,4.58333
 Wilnis,Utrecht,910.48,43.34,5715.0,None,52.19667,4.89722
-Poederoijen,Gelderland,910.64,43.77,None,None,51.78743,5.07984
 Aalsmeer,Noord-Holland,910.61,43.77,22991.0,"Aalsmeer,Alsmer,QFA,a er si mei er,Алсмер,阿尔斯梅尔",52.25917,4.75972
+Poederoijen,Gelderland,910.64,43.77,None,None,51.78743,5.07984
 Nieuwegein,Utrecht,910.81,43.79,61489.0,"Nieuwegein,Nieuwegen",52.02917,5.08056
 Uithoorn,Noord-Holland,910.78,43.97,26846.0,"Authorn,Ehjtkhorn,Uithoorn,Uthoarn,ao te huo lun,awthwrn,Эйтхорн,Աուտհորն,آوتهورن,奥特霍伦",52.2375,4.82639
 Dorst,Noord-Brabant,910.84,44.08,1965.0,None,51.59,4.85694
@@ -119,7 +118,6 @@ Maarssen,Utrecht,911.65,46.69,39675.0,"Maarsen,marsyn,مارسین",52.13917,5.0
 Rijen,Noord-Brabant,911.68,46.72,16230.0,Reijen,51.59083,4.91944
 Breukelen,Utrecht,911.72,46.78,14498.0,"beuloekeolleon,ბროიკელენი,브뢰컬런",52.17417,5.00139
 Bennebroek,Noord-Holland,911.75,46.79,5140.0,Bennebroek,52.32083,4.59861
-Aalst,Gelderland,877.08,47.08,1580.0,None,51.7825,5.12778
 Everdingen,Utrecht,912.04,47.25,1200.0,None,51.965,5.15556
 Bergen op Zoom,Noord-Brabant,912.14,47.5,66256.0,"Bergen op Zoom,Bergen-op-Zom,WOE,Берген-оп-Зом",51.495,4.29167
 Waalwijk,Noord-Brabant,912.27,48.12,45610.0,Waalwijk,51.6825,5.07083
@@ -148,7 +146,6 @@ Hoogerheide,Noord-Brabant,864.31,54.67,5810.0,None,51.42417,4.325
 Colijnsplaat,Zeeland,846.8,54.95,1485.0,Colijnsplaat,51.59917,3.84861
 Nederhorst den Berg,Noord-Holland,839.5,55.17,5241.0,None,52.2567,5.0458
 Bilthoven,Utrecht,824.9,55.42,None,None,52.1283,5.1986
-Zwanenburg,Noord-Holland,816.14,55.51,None,None,52.37786,4.74374
 Zeist,Utrecht,807.38,55.89,60949.0,"Seist,Zajst,Zeist,Zejst,Zeyst,jeiseuteu,zai si te,zaisuto,zayst,Зајст,Зейст,Զեյստ,زايست,زایست,ザイスト,宰斯特,제이스트",52.09,5.23333
 Bloemendaal,Noord-Holland,779.58,56.01,3905.0,Bloemendaal,52.4025,4.62222
 Vlijmen,Noord-Brabant,839.93,56.02,15899.0,None,51.6953,5.2119
@@ -160,8 +157,8 @@ Tilburg,Noord-Brabant,862.41,57.82,199613.0,"Cilburg,Tilburch,Tilburg,Tilburga,T
 Diemen,Noord-Holland,897.04,58.57,24361.0,"Diemen,Diemerbrug,Dijmen,Dimen,dymyn,Диймен,Димен,Դիմեն,ديمين",52.33964,4.96256
 Weesp,Noord-Holland,921.78,59.08,17802.0,"Vesp,Veysp,Weesp,fysb,wei si pu,Весп,Վեյսպ,فيسب,韋斯普",52.3075,5.04167
 Goirle,Noord-Brabant,925.0,59.33,22646.0,"Goirl,Goirle,Goorle,Gorle,Xorle,khwrla,Гоирл,Горле,Խորլե,خورلا",51.52083,5.06667
-Santpoort-Noord,Noord-Holland,922.4,59.57,None,None,52.43388,4.63255
 Hilversum,Noord-Holland,921.53,59.57,83640.0,"Hilfertsom,Hilversum,Hilvertsheim,Khilversjum,Khilversum,QYI,hylfrswm,xi er fu se mu,Хилверсум,Хилверсюм,Հիլվերսում,هيلفرسوم,هیلفرسوم,希爾弗瑟姆",52.22333,5.17639
+Santpoort-Noord,Noord-Holland,922.4,59.57,None,None,52.43388,4.63255
 Goes,Zeeland,911.13,60.23,36931.0,"Chous,Goes,Gus,Gusas,hu si,khws,Χους,Гус,خوس,胡斯",51.50417,3.88889
 Oisterwijk,Noord-Brabant,895.53,61.33,25980.0,"Oisterwijk,Ojstervejk,Oosterwijk,Ойстервейк",51.57917,5.18889
 Doorn,Utrecht,890.33,61.42,10330.0,"Doorn,Dorn,Доорн,Дорн",52.03343,5.34571
@@ -251,13 +248,11 @@ Uden,Noord-Brabant,980.89,83.49,34601.0,"UDE,Uden,Уден",51.66083,5.61944
 Veldhoven,Noord-Brabant,966.17,84.08,5340.0,None,51.41833,5.40278
 Biervliet,Zeeland,960.28,84.24,None,None,51.32849,3.68542
 Ewijk,Gelderland,954.39,84.25,4258.0,None,51.8833,5.7
-Weurt,Gelderland,957.34,84.25,283.0,None,51.8833,5.7
 Eersel,Noord-Brabant,945.56,84.49,18185.0,"Eersel,Eyrsel,ayrsl,Էյրսել,إيرسل",51.3575,5.31806
 Bergen (NH),Noord-Holland,907.28,85.88,None,None,52.66726,4.69722
 Eindhoven,Noord-Brabant,877.84,86.55,209620.0,"Aintchofen,Ajndkhoven,Ajntoven,Ajntovën,EIN,Ehjndkhoven,Ehjndkhoven khot,Eindhove,Eindhoven,Eindhovena,Eindhovenas,Eindhoveno,Eindovia,Ejndgoven,Eyndhoven,a'indahovana,ai yin huo wen,aintohofen,ayndhwfn,ayndhwwn,eindhoveni,einteuhobeon,xind ho wen,yan hao fen,Αϊντχόφεν,Айндховен,Ајндховен,Ейндговен,Эйндховен,Эйндховен хот,Էյնդհովեն,איינדהובן,آئنڈھون,آيندهوفن,آیندهوون,اینتہوون,आइंडहोवन,ไอนด์โฮเวน,ეინდჰოვენი,アイントホーフェン,埃因霍温,燕豪芬,에인트호번",51.44083,5.47778
-Zeewolde,Flevoland,877.7828571428572,86.81,19022.0,None,52.33,5.54167
+Zeewolde,Flevoland,877.78,86.81,19022.0,None,52.33,5.54167
 IJzendijke,Zeeland,877.69,87.94,1785.0,"Iezendieke,Ysendyck",51.32167,3.61667
-Schoondijke,Zeeland,877.56,88.26,1280.0,None,51.35417,3.55556
 Doorn,Noord-Brabant,890.33,88.43,6345.0,Doornakkers,51.43844,5.50887
 Waalre,Noord-Brabant,877.39,88.57,6445.0,Waalre,51.38667,5.44444
 Spierdijk,Noord-Holland,877.37,88.66,1585.0,None,52.65083,4.94306
@@ -267,9 +262,10 @@ Nuenen,Noord-Brabant,877.28,88.91,23223.0,"Njunen,Nuenen,Нюнен",51.47,5.552
 Berkhout,Noord-Holland,877.21,89.15,1905.0,None,52.64083,5.00139
 Bergeijk,Noord-Brabant,877.15,89.52,18181.0,"Bergeijk,Bergeik",51.31917,5.35833
 Schoorl,Noord-Holland,894.52,89.59,6586.0,None,52.7014,4.6944
-Aalst,Noord-Brabant,877.08,89.61,3480.0,None,51.39667,5.47778
 Westerhoven,Noord-Brabant,876.98,90.24,1635.0,None,51.3325,5.39583
+Beek en Donk,Noord-Brabant,876.97,90.26,22333.0,None,51.5161,5.6208
 Beek,Noord-Brabant,876.96,90.37,5185.0,None,51.5289,5.63382
+Valburg,Gelderland,876.96,90.37,1660.0,None,51.91167,5.79028
 Wolfheze,Gelderland,876.89,90.91,1505.0,Wolfheeze,52.00333,5.79028
 Noord-Scharwoude,Noord-Holland,876.87,90.93,5665.0,None,52.69833,4.81111
 Hoorn,Noord-Holland,876.85,90.99,68852.0,"Gorn,Hoarn,Hoorn,Hoorn NH,Horn,Khorn,he en,holeun,horn,horun,hwrn,Горн,Хорн,Հորն,هورن,โฮร์น,ホールン,荷恩,호른",52.6425,5.05972
@@ -324,9 +320,7 @@ Vierlingsbeek,Noord-Brabant,811.58,111.26,None,None,51.59644,6.00915
 Venray,Limburg,809.5,111.87,39047.0,"Venraai,Venraij",51.525,5.975
 Nederweert,Limburg,809.09,111.98,7205.0,"Nedervert,Nederweert,Neyderveyrt,Ni-jwieert,Ni-jwieërt,Недерверт,Նեյդերվեյրտ",51.28583,5.74861
 Weert,Limburg,807.84,112.18,48662.0,"Vert,Weerd,Weert,Wieert,Wieërt,Верт",51.25167,5.70694
-Dieren,Gelderland,806.2942857142857,112.61,14842.0,"di lun,迪倫",52.0525,6.1
-Teuge,Gelderland,803.9757142857143,113.53,None,None,52.23359,6.04666
-Didam,Gelderland,802.43,113.91,16603.0,None,51.9333,6.1333
+Teuge,Gelderland,803.98,113.53,None,None,52.23359,6.04666
 Epe,Gelderland,802.01,114.14,33385.0,"Ehpe,Эпе",52.3475,5.98333
 Meijel,Limburg,799.93,115.83,5180.0,"Mael,Meiel",51.34417,5.88472
 Brummen,Gelderland,798.27,116.98,21344.0,"Brummen,Бруммен",52.09,6.15556
@@ -339,13 +333,13 @@ Kampen,Overijssel,786.62,121.59,48980.0,"Gemeen Kampen,Kampen,kambn,kampeon,kan 
 Deventer,Overijssel,784.54,121.86,97331.0,"Daventria,Deventer,Deventeris,Deyventer,Dimter,Gemeen Deventer,Gemeen Dèventer,QYV,dai fen te er,de wen texr,debenteoleu,defenteru,dfntr,Девентер,Դեյվենտեր,دفنتر,เดเวนเตอร์,デーフェンテル,代芬特尔,데벤터르",52.255,6.16389
 Diepenveen,Overijssel,785.18,122.19,10838.0,None,52.2894,6.15
 Heythuysen,Limburg,789.64,122.66,6420.0,"Heijthuizen,Heithuizen,Heitse,Heythuizen,Heythuysen",51.25,5.89861
+Ens,Flevoland,790.9155555555556,122.79,3174.0,None,52.63667,5.82778
 Helden,Limburg,795.38,124.07,5530.0,None,51.31917,6.0
 Emmeloord,Flevoland,797.29,124.53,46409.0,"Ehmmelord,Emmeloard,Emmelord,ai mo luo er de,Еммелорд,Эммелорд,埃默洛爾德",52.71083,5.74861
 Doetinchem,Gelderland,798.57,124.67,49906.0,"Doetinchem,Dutinkhem,Дутинхем",51.965,6.28889
 Broekhuizen,Limburg,802.39,125.6,1906.0,None,51.4853,6.1633
 Hengelo,Gelderland,804.94,126.82,4510.0,"Hengelo (Gld),Hengeloo",52.05083,6.30972
 Nijemirdum,Friesland,811.95,128.87,None,None,52.85475,5.56607
-Velden,Limburg,815.14,129.24,5085.0,None,51.4117,6.1678
 Zwolle,Overijssel,815.78,129.37,111805.0,"Gemeen Zwolle,Svolla,Swol,Zvole,Zvolle,Zvolė,Zwolle,ci wo lei,jeubolleo,jhvola,s wol lex,zfwlh,zi wo lei,zuvuore,zvole,zwwlh,Зволе,Зволле,Զվոլե,زفوله,زولے,زووله,झ्वोला,ซโวลเลอ,ზვოლე,ズヴォレ,兹沃勒,즈볼러",52.5125,6.09444
 Tegelen,Limburg,887.9,130.77,20190.0,Tegele,51.34417,6.13611
 Herten,Limburg,901.02,130.9,3305.0,None,51.18083,5.9625
@@ -363,7 +357,6 @@ Echt,Fryslân,806.44,140.96,1200.0,Echterbrug,52.87141,5.82147
 Beek,Limburg,876.96,141.34,8415.0,"Baek,Beek",50.94083,5.79722
 Bunde,Limburg,803.38,142.31,5500.0,None,50.89667,5.73194
 Markelo,Overijssel,802.47,143.17,3785.0,None,52.235,6.49861
-Spaubeek,Limburg,801.85,143.5,3360.0,"Sjpawbik,Spanbeek,Spaubeek",50.94,5.84306
 Ulestraten,Limburg,801.55,143.67,2595.0,None,50.90583,5.78194
 Maastricht,Limburg,797.27,144.86,122378.0,"MST,Maastricht,Maastrikht,Maastrykht,Maestricht,Mastrichtas,Mastrihta,Mastrikht,Mastrique,Mastrixt,Mestreech,Māstrihta,Traiectum Mosae,ma si te li he te,mas thrichth,maseuteuliheuteu,mastrikhta,mastrikt,mastrkht,mastrsht,mastrykht,masutorihito,Μάαστριχτ,Маастрихт,Маастрыхт,Мастрихт,Մաստրիխտ,מאסטריכט,ماسترخت,ماسترشت,ماستریخت,मास्ट्रिख्ट,மாஸ்ட்ரிக்ட்,มาสทริชท์,მაასტრიხტი,マーストリヒト,马斯特里赫特,마스트리흐트",50.84833,5.68889
 Oirsbeek,Limburg,798.01,145.64,3600.0,"Oeesjbik,Oeësjbik,Oorsbeek",50.95083,5.90833
@@ -388,8 +381,7 @@ Koekange,Drenthe,806.51,153.2,1085.0,None,52.69917,6.31667
 Heerlen,Limburg,807.37,154.62,93084.0,"Coriovalo,Heele,Heerlen,Heële,Kheerlen,Хеерлен",50.88365,5.98154
 Landgraaf,Limburg,807.98,154.91,37591.0,None,50.9083,6.0297
 Wijlre,Limburg,808.18,154.96,1960.0,Wielder,50.83333,5.89583
-Gulpen,Limburg,809.8,156.18,3560.0,Gulpe,50.81583,5.88889
-Wittem,Limburg,811.2233333333334,157.42,7769.0,None,50.8133,5.9122
+Wittem,Limburg,811.22,157.42,7769.0,None,50.8133,5.9122
 Almelo,Overijssel,811.63,157.59,72725.0,"Almelo,Almeloo,QYL,Алмело",52.35667,6.6625
 Eygelshoven,Limburg,811.83,157.6,5954.0,None,50.8925,6.0592
 Delden,Overijssel,812.24,157.89,6920.0,None,52.26,6.71111
@@ -410,12 +402,14 @@ Leeuwarden,Fryslân,825.98,169.89,91424.0,"L'ovet,LWR,Leeuwarden,Leewarden,Leuva
 Hoek,Fryslân,826.36,169.95,1100.0,Hoek,53.20455,5.80192
 Sumar,Friesland,835.61,175.09,None,None,53.17861,6.00039
 Bovensmilde,Drenthe,843.32,180.71,None,None,52.97602,6.48145
+Denekamp,Overijssel,843.6866666666667,180.84,None,None,52.3794,7.0089
 Blije,Friesland,851.02,185.99,None,None,53.35201,5.8616
 Assen,Drenthe,851.79,186.34,62237.0,"Asen,Asenas,Asningseli,Asningsėli,Asse,Assen,a sen,aseon,asn,assen,xas sein,Άσσεν,Асен,Ассен,Ասսեն,آسن,أسن,อาสเซิน,アッセン,阿森,아선",52.99667,6.5625
 Boerakker,Groningen,856.03,189.75,None,None,53.18701,6.32931
 Rolde,Drenthe,857.19,189.95,3740.0,None,52.98417,6.64861
 Tolbert,Groningen,858.34,190.19,None,None,53.17345,6.36354
 Emmen,Drenthe,859.11,191.67,57010.0,"Ehmmen,Emen,Emenas,Emme,Emmen,Emmeni vald,ai men,amn,aymyn,emen,emena,emeon,Емен,Еммен,Эммен,Էմմեն,אמן,إمن,إيمين,امن,एमेन,エメン,埃門,에먼",52.77917,6.90694
+Gasselte,Drenthe,867.2051612903225,196.9,1495.0,None,52.97167,6.79444
 Midlaren,Drenthe,871.06,200.34,None,None,53.11013,6.67696
 Noordlaren,Groningen,871.44,200.62,None,None,53.12084,6.66676
 Nieuw-Weerdinge,Drenthe,872.6,200.74,None,None,52.8574,6.98781
@@ -430,7 +424,6 @@ Bedum,Groningen,877.61,211.42,7765.0,Bedum,53.30083,6.60278
 Zuidbroek,Groningen,877.61,213.53,2255.0,"Zuidbreek,Zuidbrock,Zuidbruek",53.16333,6.86111
 Ten Boer,Groningen,877.61,213.71,4355.0,Ten Boer,53.27583,6.69444
 Noordbroek,Groningen,877.61,216.44,1665.0,None,53.195,6.87361
-Siddeburen,Groningen,877.61,220.18,2910.0,None,53.25,6.86806
 Winschoten,Groningen,877.61,221.24,18506.0,"Vinskhoten,Winschoten,Wynskoat,wen si huo teng,Винсхотен,溫斯霍滕",53.14417,7.03472
 Uithuizen,Groningen,877.61,223.16,4935.0,None,53.4075,6.67083
 Appingedam,Groningen,877.61,225.09,12364.0,None,53.32167,6.85833

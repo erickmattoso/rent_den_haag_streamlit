@@ -24,21 +24,22 @@ def main():
     </style>
     """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-    # pages = {'Costs of Living': page_settings}
-    # page = st.sidebar.radio('Select your page', tuple(pages.keys()))
-    # pages[page]()
     page_settings()
 
 
 def page_settings():
+    # Lorem
     st.title('Costs of Living')
 
+    # Lorem
     @st.cache
     def fetch_and_clean_data1():
         df = pd.read_csv('costs.csv')
         return df
+    # Lorem
     final = fetch_and_clean_data1()
 
+    # Lorem
     def display_table(df: pd.DataFrame) -> AgGrid:
         gb = GridOptionsBuilder.from_dataframe(df)
         gb.configure_default_column(groupable=True, value=True, enableRowGroup=True,
@@ -63,13 +64,13 @@ def page_settings():
     # distance selected slider
     max_distance = int(final['distance'].max())
     min_distance = int(final['distance'].min())
-    distance_selected = st.sidebar.slider(
+    distance_selected = row2.slider(
         'Total distance', min_distance, max_distance, (min_distance, max_distance))
 
     # price selected slider
     max_price = int(final['price'].max())
     min_price = int(final['price'].min())
-    price_selected = st.sidebar.slider(
+    price_selected = row2.slider(
         'Total price', min_price, max_price, (min_price, max_price))
 
     # filter
@@ -83,24 +84,34 @@ def page_settings():
     st.session_state.display_table = True
     t = display_table(final)
 
+    # Lorem
     ault = []
     amount = len(t["selected_rows"])
     for i in range(amount):
         ault.append(t["selected_rows"][i]["city"])
 
+    # Lorem
     if len(ault) > 0:
         final = final[final['city'].isin(ault)]
+        default_val = ault
     else:
+        default_val = list(final['city'].unique())  # ["Rotterdam"]
         pass
+
+    # Lorem
     final = final.sort_values('price')
     lats = final['latitude'].tolist()
     lons = final['longitude'].tolist()
     city = final['city'].tolist()
     price = final['price'].tolist()
 
-    map = folium.Map(location=[52.2129919, 5.2793703], zoom_start=7)
+    # Lorem
+    OP = [51.9071833, 4.4728155]
+    map = folium.Map(OP, tiles='cartodbdark_matter')
     color_pallete = (sns.color_palette("YlOrBr", len(price))).as_hex()
     feature_group = folium.FeatureGroup("Locations")
+
+    # Lorem
     i = 0
     for lats, lons, price, city in zip(lats, lons, price, city):
         feature_group.add_child(folium.CircleMarker(
@@ -111,11 +122,20 @@ def page_settings():
             fill=True,
             fill_opacity=1))
         i += 1
+
+    # Lorem
     map.add_child(feature_group)
+
+    # add zoom
+    sw = final[['latitude', 'longitude']].min().values.tolist()
+    ne = final[['latitude', 'longitude']].max().values.tolist()
+    map.fit_bounds([sw, ne])
     row1.write(map)
 
+    # Lorem
     st.title("Places to rent in The Netherlands")
 
+    # Lorem
     @st.cache
     # read data
     def fetch_and_clean_data2():
@@ -123,35 +143,34 @@ def page_settings():
         return df
     df_pararius = fetch_and_clean_data2()
 
-    # create filter for city
-    if len(ault) > 0:
-        default_val = ault
-
-    else:
-        default_val = ["Rotterdam"]
-
+    # read data
     df_pararius = df_pararius[df_pararius['City'].isin(default_val)]
 
     # Filter for price
     max_price = int(df_pararius['Price'].max())
     min_price = int(df_pararius['Price'].min())
-    col1, col2 = st.sidebar.columns(2)
-    price_selected_0 = col1.number_input(
+
+    # Lorem
+    row1, row2 = st.columns(2)
+
+    # Lorem
+    price_selected_0 = row2.number_input(
         'Price (Min)', min_value=0, max_value=max_price, value=0, step=50)
-    price_selected_1 = col2.number_input(
+    price_selected_1 = row2.number_input(
         'Price (Max)', min_value=0, max_value=max_price, value=1300, step=50)
     price_selected = [price_selected_0, price_selected_1]
 
     # Filter for area
     max_area = int(df_pararius['Area'].max())
     min_area = int(df_pararius['Area'].min())
-    area_selected = st.sidebar.slider(
+    area_selected = row2.slider(
         'Total Area', min_area, max_area, (45, max_area))
 
     # Filter for interior
-    my_expander = st.sidebar.expander(label='Advanced Filters')
+    my_expander = row2.expander(label='Advanced Filters')
+
+    # Filter for Date
     with my_expander:
-        # Filter for Date
         df_pararius['Offered'] = pd.to_datetime(
             df_pararius['Offered'], format='%d-%m-%Y')
         max_offered = (df_pararius['Offered'].max())
@@ -169,12 +188,13 @@ def page_settings():
         min_available = (pd.to_datetime(d2[0], format='%Y-%m-%d'))
         max_available = (pd.to_datetime(d2[1], format='%Y-%m-%d'))
 
+        # Filter for Date
         interior_selected = st.multiselect('Interior', options=list(
             df_pararius['interior'].unique()), default=list(df_pararius['interior'].unique()))
-
         status_selected = st.multiselect('Status', options=list(
             df_pararius['status'].unique()), default=list(df_pararius['status'].unique()))
 
+        # Filter for Date
         max_room = int(df_pararius['Rooms'].max())
         min_room = int(df_pararius['Rooms'].min())
         room_selected = st.slider(
@@ -205,7 +225,7 @@ def page_settings():
     # Here I will tell how many I want to check
     max_val = int(df_pararius.index.max())
     min_val = int(df_pararius.index.min())
-    index_selected = st.sidebar.slider(
+    index_selected = row2.slider(
         'Amout houses', min_val, max_val, (min_val, 10))
 
     # apply filter
@@ -248,11 +268,11 @@ def page_settings():
     index = good.index.tolist()
     image = good['image'].tolist()
 
+    # Lorem
     locations = list(zip(lats, lons, price, irl, area,
                      rooms, garden, index, image))
 
     # MAP
-    OP = [51.9071833, 4.4728155]
     pararius = folium.Map(OP, tiles='cartodbdark_matter')
 
     # add zoom
@@ -263,14 +283,13 @@ def page_settings():
     # add data to map
     FastMarkerCluster(data=locations, name='good', callback=callback,
                       show=True, tooltip='tooltip').add_to(pararius)
-
     icon_url = 'https://media-exp1.licdn.com/dms/image/C4D0BAQHSDPW5wBr9eA/company-logo_200_200/0/1623138109412?e=2159024400&v=beta&t=XM6Umkb8JZ6XNliPWZzaNxjLgkL8BCv8newgm3VvTx8'
     icon = folium.features.CustomIcon(icon_url, icon_size=(28, 30))
     folium.Marker(location=OP, icon=icon).add_to(pararius)
     folium.LayerControl().add_to(pararius)
 
     # plot map on streamlit
-    st.write(pararius)
+    row1.write(pararius)
 
     # plot data on streamlit
     good_ = good[[
@@ -288,8 +307,12 @@ def page_settings():
     towrite = io.BytesIO()
     good[['url', 'Price', 'address', 'street', 'agency', 'date']].to_excel(
         towrite, encoding='utf-8', index=False, header=True)
-    towrite.seek(0)  # reset pointer
-    b64 = base64.b64encode(towrite.read()).decode()  # some strings
+
+    # reset pointer
+    towrite.seek(0)
+
+    # some strings
+    b64 = base64.b64encode(towrite.read()).decode()
     linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="obvious_people_houses.xlsx">Download excel file</a>'
     st.text(" \n")
     st.markdown(linko, unsafe_allow_html=True)

@@ -1,10 +1,13 @@
 # Import Libs
 from folium.plugins import FastMarkerCluster
-import io
+from st_aggrid import AgGrid, GridUpdateMode, GridOptionsBuilder
 import base64
 import folium
+import io
 import pandas as pd
+import seaborn as sns
 import streamlit as st
+
 
 # read data
 df_pararius = pd.read_csv('df_coo_pararius2.csv', index_col=[0])

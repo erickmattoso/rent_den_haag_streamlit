@@ -7,6 +7,7 @@ import io
 import pandas as pd
 import seaborn as sns
 import streamlit as st
+# restaurant elpidio voorburg
 
 
 def main():
@@ -65,7 +66,7 @@ def page_settings():
     max_distance = int(final['distance'].max())
     min_distance = int(final['distance'].min())
     distance_selected = row2.slider(
-        'Distance from Obvious People', min_distance, max_distance, (min_distance, 23))
+        'Distance from Obvious People', min_distance, max_distance, (min_distance, max_distance))
 
     # cost selected slider
     max_cost = int(final['cost'].max())

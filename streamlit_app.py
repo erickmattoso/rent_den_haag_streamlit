@@ -32,7 +32,7 @@ def page_settings():
     st.title('Costs of Living')
 
     # Lorem
-    @st.cache
+    # @st.cache
     def fetch_and_clean_data1():
         df = pd.read_csv('costs.csv', index_col=[0])
         return df
@@ -136,7 +136,7 @@ def page_settings():
     st.title("Places to rent in The Netherlands")
 
     # Lorem
-    @st.cache
+    # @st.cache
     # read data
     def fetch_and_clean_data2():
         df = pd.read_csv('df_coo_pararius2.csv', index_col=[0])

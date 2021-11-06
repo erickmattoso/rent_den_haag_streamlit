@@ -139,7 +139,7 @@ def page_settings():
     # @st.cache
     # read data
     def fetch_and_clean_data2():
-        df = pd.read_csv('df_coo_pararius.csv', index_col=[0])
+        df = pd.read_csv('df_pararius.csv', index_col=[0])
         return df
     df_pararius = fetch_and_clean_data2()
 

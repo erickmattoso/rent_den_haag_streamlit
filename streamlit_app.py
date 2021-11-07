@@ -127,6 +127,7 @@ def page_settings():
     map.add_child(feature_group)
 
     # add zoom
+    # add zoom
     sw = final[['latitude', 'longitude']].min().values.tolist()
     ne = final[['latitude', 'longitude']].max().values.tolist()
     map.fit_bounds([sw, ne])

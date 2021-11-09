@@ -18,9 +18,7 @@ def main():
     <style>
     # MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    .css-1y0tads {padding-top: 0rem;}
-    .css-hby737 {padding: 1rem 1rem;}
-    .css-ijjfg8 {width: 25px;}
+    .css-18e3th9 {padding: 1rem 5rem 10rem;}
     </style>
     """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)

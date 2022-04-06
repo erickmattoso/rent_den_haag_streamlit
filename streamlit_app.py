@@ -99,7 +99,7 @@ def page_settings():
         final = final[final['city'].isin(ault)]
         default_val = ault
     else:
-        default_val = list(final['city'].unique())  # ["Rotterdam"]
+        default_val = list(final['city'].unique())
         pass
 
     # Lorem
@@ -130,7 +130,6 @@ def page_settings():
     # Lorem
     map.add_child(feature_group)
 
-    # add zoom
     # add zoom
     sw = final[['latitude', 'longitude']].min().values.tolist()
     ne = final[['latitude', 'longitude']].max().values.tolist()

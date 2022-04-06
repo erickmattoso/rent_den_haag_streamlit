@@ -13,19 +13,6 @@ from PIL import Image, ImageEnhance
 
 
 def main():
-    # create streamlit page
-    st.set_page_config(
-        layout='wide', page_title='ObviousPeopleApp', page_icon="🏠")
-
-    # config streamlit layout
-    hide_streamlit_style = """
-    <style>
-    .css-18e3th9 {padding: 1rem 5rem 10rem;} 
-    # h1,.css-qrbaxs {color:#14046c;}
-    # span[data-baseweb="tag"] {background-color: #f9441f !important;}
-    </style>
-    """
-    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
     page_settings()
 
 
@@ -36,7 +23,6 @@ def page_settings():
     st.title('Costs of Living')
 
     # Lorem
-    # @st.cache()
     def fetch_and_clean_data1():
         df = pd.read_csv('costs.csv', index_col=[0])
         return df
@@ -55,7 +41,6 @@ def page_settings():
             df,
             gridOptions=gridOptions,
             height=400,
-            width='100%',
             update_mode=GridUpdateMode.MODEL_CHANGED,
             allow_unsafe_jscode=True,
             fit_columns_on_grid_load=True,
@@ -140,7 +125,6 @@ def page_settings():
     st.title("Places to rent in The Netherlands")
 
     # Lorem
-    # @st.cache()
     # read data
     def fetch_and_clean_data2():
         df = pd.read_csv('df_pararius.csv', index_col=[0])

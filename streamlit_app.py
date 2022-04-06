@@ -25,6 +25,7 @@ def main():
     # span[data-baseweb="tag"] {background-color: #f9441f !important;}
     </style>
     """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
     page_settings()
 
 

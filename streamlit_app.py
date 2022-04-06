@@ -9,23 +9,28 @@ import seaborn as sns
 import streamlit as st
 
 
+from PIL import Image, ImageEnhance
+
+
 def main():
     # create streamlit page
-    st.set_page_config(layout='wide')
+    st.set_page_config(
+        layout='wide', page_title='ObviousPeopleApp', page_icon="🏠")
 
     # config streamlit layout
     hide_streamlit_style = """
     <style>
-    # MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    .css-18e3th9 {padding: 1rem 5rem 10rem;}
+    .css-18e3th9 {padding: 1rem 5rem 10rem;} 
+    # h1,.css-qrbaxs {color:#14046c;}
+    # span[data-baseweb="tag"] {background-color: #f9441f !important;}
     </style>
     """
-    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
     page_settings()
 
 
 def page_settings():
+    st.image(Image.open('obviouspeople_.png'), width=225)
+
     # Lorem
     st.title('Costs of Living')
 

@@ -62,8 +62,10 @@ def page_settings():
             'alternate names',
             'population',
             'cost',
-            'distance',
-            'distance']]
+            'distance']].rename(columns={
+                "cost": "cost of living",
+                "distance": "distance from Obvious People",
+            })
 
         df = df.drop_duplicates('city')
         gb = GridOptionsBuilder.from_dataframe(df)

@@ -126,7 +126,7 @@ def page_settings():
         pass
 
     # Lorem
-    final = final.sort_values('cost')
+    final = final.sort_values('deal', ascending=False).reset_index(drop=True)
     lats = final['latitude_city'].tolist()
     lons = final['longitude_city'].tolist()
     city = final['city'].tolist()
@@ -329,6 +329,7 @@ def page_settings():
         'outdoor garden',
         "transfer offered since",
         'transfer available',
+        "deal"
     ]].to_html(escape=False)
 
     # prepare to download

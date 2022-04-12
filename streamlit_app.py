@@ -19,8 +19,6 @@ def main():
     hide_streamlit_style = """
     <style>
     .css-18e3th9 {padding: 1rem 5rem 10rem;} 
-    # h1,.css-qrbaxs {color:#14046c;}
-    # span[data-baseweb="tag"] {background-color: #f9441f !important;}
     </style>
     """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
@@ -28,20 +26,46 @@ def main():
 
 
 def page_settings():
-    st.image(Image.open('obviouspeople_.png'), width=225)
+    col1, col2, col3 = st.columns([0.2, 0.70, 0.2])
+    with col1:
+        st.image(Image.open('obviouspeople_.png'), width=225)
+    # with col2:
+    #     st.markdown(
+    #         """<style>.font{color:green;font-size:18px;padding-left:50px;text-decoration:none;font-weight: bold;}</style>""", unsafe_allow_html=True)
+    #     st.markdown(
+    #         """
+    #             <a href='/solutions'            class='font'>Solutions</a>
+    #             <a href='/salesforce-academy'   class='font'>Academy</a>
+    #             <a href='/community'            class='font'>Community</a>
+    #             <a href='/services'             class='font'>Services</a>
+    #             <a href='/about-us'             class='font'>About</a>
+    #         """,
+    #         unsafe_allow_html=True)
+    # with col3:
+    #     url = 'https://www.streamlit.io/'
+    #     if st.button('Open browser'):
+    #         webbrowser.open_new_tab(url)
 
     # Lorem
     st.title('Costs of Living')
 
     # Lorem
-    def fetch_and_clean_data1():
-        df = pd.read_csv('costs.csv', index_col=[0])
-        return df
-    # Lorem
-    final = fetch_and_clean_data1()
+    original = pd.read_csv('df_housing_app.csv', index_col=[0])
+
+    final = original.copy()
 
     # Lorem
     def display_table(df: pd.DataFrame) -> AgGrid:
+        df = df[[
+            'city',
+            'province',
+            'alternate names',
+            'population',
+            'cost',
+            'distance',
+            'distance']]
+
+        df = df.drop_duplicates('city')
         gb = GridOptionsBuilder.from_dataframe(df)
         gb.configure_default_column(groupable=True, value=True, enableRowGroup=True,
                                     aggFunc='sum', editable=True, groupSelectsChildren=True, groupSelectsFiltered=True)
@@ -68,8 +92,8 @@ def page_settings():
         'Distance from Obvious People', min_distance, max_distance, (min_distance, max_distance))
 
     # cost selected slider
-    max_cost = int(final['cost'].max())
-    min_cost = int(final['cost'].min())
+    max_cost = int(final['cost'].max()+1)
+    min_cost = int(final['cost'].min()-1)
     cost_selected = row2.slider(
         'Cost of Living', min_cost, max_cost, (min_cost, max_cost))
 
@@ -78,12 +102,13 @@ def page_settings():
         final['cost'] >= cost_selected[0]) & (final['cost'] <= cost_selected[1])
 
     # add filter
+
     final = final[filter_]
+    # st.write(final[final['cost'].isna()])
 
     # table
     st.session_state.display_table = True
-    t = display_table(final.drop(columns=['latitude', 'longitude']))
-
+    t = display_table(final.drop(columns=['latitude_city', 'longitude_city']))
     # Lorem
     ault = []
     amount = len(t["selected_rows"])
@@ -100,8 +125,8 @@ def page_settings():
 
     # Lorem
     final = final.sort_values('cost')
-    lats = final['latitude'].tolist()
-    lons = final['longitude'].tolist()
+    lats = final['latitude_city'].tolist()
+    lons = final['longitude_city'].tolist()
     city = final['city'].tolist()
     cost = final['cost'].tolist()
 
@@ -127,8 +152,8 @@ def page_settings():
     map.add_child(feature_group)
 
     # add zoom
-    sw = final[['latitude', 'longitude']].min().values.tolist()
-    ne = final[['latitude', 'longitude']].max().values.tolist()
+    sw = final[['latitude_city', 'longitude_city']].min().values.tolist()
+    ne = final[['latitude_city', 'longitude_city']].max().values.tolist()
     map.fit_bounds([sw, ne])
     row1.write(map)
 
@@ -138,81 +163,82 @@ def page_settings():
     # Lorem
     # read data
     def fetch_and_clean_data2():
-        df = pd.read_csv('df_pararius.csv', index_col=[0])
+        df = original.copy()
         return df
     df_pararius = fetch_and_clean_data2()
 
     # read data
-    df_pararius = df_pararius[df_pararius['City'].isin(default_val)]
+    df_pararius = df_pararius[df_pararius['city'].isin(default_val)]
 
     # Filter for price
-    max_price = int(df_pararius['Price'].max())
-    min_price = int(df_pararius['Price'].min())
+    max_price = (df_pararius['price'].max())
+    min_price = (df_pararius['price'].min())
 
     # Lorem
     row1, row2 = st.columns(2)
 
     # Lorem
     price_selected_0 = row2.number_input(
-        'Price (Min)', min_value=0, max_value=max_price, value=0, step=50)
+        'price (Min)', min_value=0, max_value=max_price, value=0, step=50)
     price_selected_1 = row2.number_input(
-        'Price (Max)', min_value=0, max_value=max_price, value=1300, step=50)
+        'price (Max)', min_value=0, max_value=max_price, value=max_price, step=50)
     price_selected = [price_selected_0, price_selected_1]
 
     # Filter for area
-    max_area = int(df_pararius['Area'].max())
-    min_area = int(df_pararius['Area'].min())
+    max_area = int(df_pararius['dimensions living area'].max())
+    min_area = int(df_pararius['dimensions living area'].min())
     area_selected = row2.slider(
-        'Total Area', min_area, max_area, (45, max_area))
+        'Total Area', min_area, max_area, (0, max_area))
 
     # Filter for interior
     my_expander = row2.expander(label='Advanced Filters')
 
     # Filter for Date
     with my_expander:
-        df_pararius['Offered'] = pd.to_datetime(
-            df_pararius['Offered'], format='%d-%m-%Y')
-        max_offered = (df_pararius['Offered'].max())
-        min_offered = (df_pararius['Offered'].min())
+        df_pararius["transfer offered since"] = pd.to_datetime(
+            df_pararius["transfer offered since"], format='%d-%m-%Y')
+        max_offered = (df_pararius["transfer offered since"].max())
+        min_offered = (df_pararius["transfer offered since"].min())
         d1 = st.date_input('Offered since', [min_offered, max_offered])
         min_offered = (pd.to_datetime(d1[0], format='%Y-%m-%d'))
         max_offered = (pd.to_datetime(d1[1], format='%Y-%m-%d'))
 
         # Filter for Date
-        df_pararius['Available'] = pd.to_datetime(
-            df_pararius['Available'], format='%d-%m-%Y')
-        max_available = (df_pararius['Available'].max())
-        min_available = (df_pararius['Available'].min())
-        d2 = st.date_input('Available', [min_available, max_available])
+        df_pararius['transfer available'] = pd.to_datetime(
+            df_pararius['transfer available'], format='%d-%m-%Y')
+        max_available = (df_pararius['transfer available'].max())
+        min_available = (df_pararius['transfer available'].min())
+        d2 = st.date_input('transfer available', [
+                           min_available, max_available])
         min_available = (pd.to_datetime(d2[0], format='%Y-%m-%d'))
         max_available = (pd.to_datetime(d2[1], format='%Y-%m-%d'))
 
         # Filter for Date
-        interior_selected = st.multiselect('Interior', options=list(
-            df_pararius['interior'].unique()), default=list(df_pararius['interior'].unique()))
-        status_selected = st.multiselect('Status', options=list(
-            df_pararius['status'].unique()), default=list(df_pararius['status'].unique()))
+        interior_selected = st.multiselect('transfer interior', options=list(
+            df_pararius['transfer interior'].unique()), default=list(df_pararius['transfer interior'].unique()))
+        status_selected = st.multiselect('transfer status', options=list(
+            df_pararius['transfer status'].unique()), default=list(df_pararius['transfer status'].unique()))
 
         # Filter for Date
-        max_room = int(df_pararius['Rooms'].max())
-        min_room = int(df_pararius['Rooms'].min())
+        max_room = int(df_pararius['layout number of rooms'].max())
+        min_room = int(df_pararius['layout number of rooms'].min())
         room_selected = st.slider(
-            'Rooms', min_room, max_room, (min_room, max_room))
+            'layout number of rooms', min_room, max_room, (min_room, max_room))
 
     # organize filter
     filter_ = \
-        (df_pararius['interior'].isin(interior_selected))\
-        & (df_pararius['status'].isin(status_selected))\
-        & (df_pararius['Price'] >= price_selected[0])\
-        & (df_pararius['Price'] <= price_selected[1])\
-        & (df_pararius['Area'] >= area_selected[0])\
-        & (df_pararius['Area'] <= area_selected[1])\
-        & (df_pararius['Rooms'] >= room_selected[0])\
-        & (df_pararius['Rooms'] <= room_selected[1])\
-        & (df_pararius['Offered'] >= min_offered)\
-        & (df_pararius['Offered'] <= max_offered)\
-        & (df_pararius['Available'] >= min_available)\
-        & (df_pararius['Available'] <= max_available)\
+        (df_pararius['transfer interior'].isin(interior_selected))\
+        & (df_pararius['transfer status'].isin(status_selected))\
+        & (df_pararius['price'] >= price_selected[0])\
+        & (df_pararius['price'] <= price_selected[1])\
+        & (df_pararius['dimensions living area'] >= area_selected[0])\
+        & (df_pararius['dimensions living area'] <= area_selected[1])\
+        & (df_pararius['layout number of rooms'] >= room_selected[0])\
+        & (df_pararius['layout number of rooms'] <= room_selected[1])\
+        & (df_pararius["transfer offered since"] >= min_offered)\
+        & (df_pararius["transfer offered since"] <= max_offered)\
+        & (df_pararius['transfer available'] >= min_available)\
+        & (df_pararius['transfer available'] <= max_available)\
 
     # apply filter
     df_pararius = df_pararius[filter_]
@@ -246,11 +272,11 @@ def page_settings():
                                     <img src=${img.text} title='house' width='150' height='100'/>\
                                     <br>\
                                     Index - ${index.text}<br>\
-                                    Price - € ${display_text_price.text}<br>\
+                                    price - € ${display_text_price.text}<br>\
                                     Area - ${area.text} m² <br>\
                                     Rooms - ${rooms.text}<br>\
                                     Garden - ${garden.text} m² <br>\
-                                    <a href=https://www.pararius.com${display_text_link_.text} target='blank'> Source </a>\
+                                    <a href=${display_text_link_.text} target='blank'> Source </a>\
                                 </div>`)[0];"
                 "popup.setContent(mytext);"
                 "marker.bindPopup(popup);"
@@ -259,13 +285,13 @@ def page_settings():
     # prepare data to map
     lats = good['latitude'].tolist()
     lons = good['longitude'].tolist()
-    price = good['Price'].tolist()
-    irl = good['irl'].tolist()
-    area = good['Area'].tolist()
-    rooms = good['Rooms'].tolist()
-    garden = good['Garden'].tolist()
+    price = good['price'].tolist()
+    irl = good['url'].tolist()
+    area = good['dimensions living area'].tolist()
+    rooms = good['layout number of rooms'].tolist()
+    garden = good['outdoor garden'].tolist()
     index = good.index.tolist()
-    image = good['image'].tolist()
+    image = good['img'].tolist()
 
     # Lorem
     locations = list(zip(lats, lons, price, irl, area,
@@ -292,20 +318,20 @@ def page_settings():
 
     # plot data on streamlit
     good_ = good[[
-        'Add',
-        'Price',
-        'City',
-        'Area',
-        'Rooms',
-        'Garden',
-        'Offered',
-        'Available',
+        'image',
+        'title',
+        'price',
+        'city',
+        'dimensions living area',
+        'layout number of rooms',
+        'outdoor garden',
+        "transfer offered since",
+        'transfer available',
     ]].to_html(escape=False)
 
     # prepare to download
     towrite = io.BytesIO()
-    good[['url', 'Price', 'address', 'street', 'agency', 'date']].to_excel(
-        towrite, encoding='utf-8', index=False, header=True)
+    good.to_excel(towrite, encoding='utf-8', index=False, header=True)
 
     # reset pointer
     towrite.seek(0)

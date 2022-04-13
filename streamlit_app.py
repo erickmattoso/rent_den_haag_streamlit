@@ -26,30 +26,13 @@ def main():
 
 
 def page_settings():
-    col1, col2, col3 = st.columns([0.2, 0.70, 0.2])
-    with col1:
-        st.image(Image.open('obviouspeople_.png'), width=225)
-    # with col2:
-    #     st.markdown(
-    #         """<style>.font{color:green;font-size:18px;padding-left:50px;text-decoration:none;font-weight: bold;}</style>""", unsafe_allow_html=True)
-    #     st.markdown(
-    #         """
-    #             <a href='/solutions'            class='font'>Solutions</a>
-    #             <a href='/salesforce-academy'   class='font'>Academy</a>
-    #             <a href='/community'            class='font'>Community</a>
-    #             <a href='/services'             class='font'>Services</a>
-    #             <a href='/about-us'             class='font'>About</a>
-    #         """,
-    #         unsafe_allow_html=True)
-    # with col3:
-    #     url = 'https://www.streamlit.io/'
-    #     if st.button('Open browser'):
-    #         webbrowser.open_new_tab(url)
+    # icon
+    st.markdown('''<a href="https://obviouspeople.webflow.io"><img src="https://raw.githubusercontent.com/erickmattoso/rent_den_haag_streamlit/main/obviouspeople_.png" width='225'/></a>''', unsafe_allow_html=True)
 
-    # Lorem
+    # title
     st.title('Costs of Living')
 
-    # Lorem
+    # read files
     original = pd.read_csv('df_housing_app.csv', index_col=[0])
 
     final = original.copy()
@@ -104,13 +87,12 @@ def page_settings():
         final['cost'] >= cost_selected[0]) & (final['cost'] <= cost_selected[1])
 
     # add filter
-
     final = final[filter_]
-    # st.write(final[final['cost'].isna()])
 
     # table
     st.session_state.display_table = True
     t = display_table(final.drop(columns=['latitude_city', 'longitude_city']))
+
     # Lorem
     ault = []
     amount = len(t["selected_rows"])
@@ -162,12 +144,8 @@ def page_settings():
     # Lorem
     st.title("Places to rent in The Netherlands")
 
-    # Lorem
     # read data
-    def fetch_and_clean_data2():
-        df = original.copy()
-        return df
-    df_pararius = fetch_and_clean_data2()
+    df_pararius = original.copy()
 
     # read data
     df_pararius = df_pararius[df_pararius['city'].isin(default_val)]
@@ -179,12 +157,11 @@ def page_settings():
     # Lorem
     row1, row2 = st.columns(2)
 
-    # Lorem
-    price_selected_0 = row2.number_input(
-        'price (Min)', min_value=0, max_value=max_price, value=0, step=50)
-    price_selected_1 = row2.number_input(
-        'price (Max)', min_value=0, max_value=max_price, value=max_price, step=50)
-    price_selected = [price_selected_0, price_selected_1]
+    # Filter for area
+    max_price = int(df_pararius['price'].max())
+    min_price = int(df_pararius['price'].min())
+    price_selected = row2.slider(
+        'Price', min_price, max_price, (min_price, max_price))
 
     # Filter for area
     max_area = int(df_pararius['dimensions living area'].max())
@@ -321,15 +298,13 @@ def page_settings():
     # plot data on streamlit
     good_ = good[[
         'image',
-        'title',
         'price',
         'city',
         'dimensions living area',
         'layout number of rooms',
         'outdoor garden',
         "transfer offered since",
-        'transfer available',
-        "deal"
+        'transfer available'
     ]].to_html(escape=False)
 
     # prepare to download

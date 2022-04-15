@@ -47,7 +47,7 @@ def page_settings():
             'cost',
             'distance']].rename(columns={
                 "cost": "cost of living",
-                "distance": "distance from Obvious People",
+                "distance": "distance from O.P.",
             })
 
         df = df.drop_duplicates('city')
@@ -57,14 +57,8 @@ def page_settings():
         gb.configure_selection('multiple', use_checkbox=True)
         gb.configure_pagination(enabled=True)
         gridOptions = gb.build()
-        main_grid_response = AgGrid(
-            df,
-            gridOptions=gridOptions,
-            height=400,
-            update_mode=GridUpdateMode.MODEL_CHANGED,
-            allow_unsafe_jscode=True,
-            fit_columns_on_grid_load=True,
-        )
+        main_grid_response = AgGrid(df, gridOptions=gridOptions, height=400,
+                                    update_mode=GridUpdateMode.MODEL_CHANGED, allow_unsafe_jscode=True, fit_columns_on_grid_load=True)
         return main_grid_response
 
     # positioning

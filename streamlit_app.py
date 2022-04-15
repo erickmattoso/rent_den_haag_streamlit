@@ -47,7 +47,7 @@ def page_settings():
             'cost',
             'distance']].rename(columns={
                 "cost": "cost of living",
-                "distance": "distance from O.P.",
+                "distance": "distance from Obvious People",
             })
 
         df = df.drop_duplicates('city')

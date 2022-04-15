@@ -281,7 +281,7 @@ def page_settings():
     # add data to map
     FastMarkerCluster(data=locations, name='good', callback=callback,
                       show=True, tooltip='tooltip').add_to(pararius)
-    icon_url = 'https://media-exp1.licdn.com/dms/image/C4D0BAQHSDPW5wBr9eA/company-logo_200_200/0/1623138109412?e=2159024400&v=beta&t=XM6Umkb8JZ6XNliPWZzaNxjLgkL8BCv8newgm3VvTx8'
+    icon_url = 'https://raw.githubusercontent.com/erickmattoso/rent_den_haag_streamlit/main/obviouspeople.png'
     icon = folium.features.CustomIcon(icon_url, icon_size=(28, 30))
     folium.Marker(location=OP, icon=icon).add_to(pararius)
     folium.LayerControl().add_to(pararius)

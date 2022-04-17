@@ -18,7 +18,7 @@ def main():
     # config streamlit layout
     hide_streamlit_style = """
     <style>
-    .css-18e3th9 {padding: 1rem 5rem 10rem;} 
+    .css-18e3th9 {padding: 1rem 5rem 10rem;}
     </style>
     """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
@@ -33,24 +33,13 @@ def page_settings():
     st.title('Costs of Living')
 
     # read files
-    original = pd.read_csv('df_housing_app.csv', index_col=[0])
+    df_housing = pd.read_csv('df_housing_app.csv', index_col=[0])[
+        ['price', 'city', 'dimensions living area', 'transfer offered since', 'transfer available', 'transfer interior', 'transfer status', 'layout number of rooms', 'deal', 'latitude', 'longitude', 'url', 'img', 'outdoor garden', 'image']]
 
-    final = original.copy()
+    cost_liv = pd.read_csv('cost_living.csv', index_col=[0])
 
     # Lorem
     def display_table(df: pd.DataFrame) -> AgGrid:
-        df = df[[
-            'city',
-            'province',
-            'alternate names',
-            'population',
-            'cost',
-            'distance']].rename(columns={
-                "cost": "cost of living",
-                "distance": "distance from Obvious People",
-            })
-
-        df = df.drop_duplicates('city')
         gb = GridOptionsBuilder.from_dataframe(df)
         gb.configure_default_column(groupable=True, value=True, enableRowGroup=True,
                                     aggFunc='sum', editable=True, groupSelectsChildren=True, groupSelectsFiltered=True)
@@ -65,27 +54,28 @@ def page_settings():
     row1, row2 = st.columns(2)
 
     # distance selected slider
-    max_distance = int(final['distance'].max())
-    min_distance = int(final['distance'].min())
+    max_distance = int(cost_liv['distance'].max())
+    min_distance = int(cost_liv['distance'].min())
     distance_selected = row2.slider(
         'Distance from Obvious People', min_distance, max_distance, (min_distance, max_distance))
 
     # cost selected slider
-    max_cost = int(final['cost'].max()+1)
-    min_cost = int(final['cost'].min()-1)
+    max_cost = int(cost_liv['cost'].max()+1)
+    min_cost = int(cost_liv['cost'].min()-1)
     cost_selected = row2.slider(
         'Cost of Living', min_cost, max_cost, (min_cost, max_cost))
 
     # filter
-    filter_ = (final['distance'] >= distance_selected[0]) & (final['distance'] <= distance_selected[1]) & (
-        final['cost'] >= cost_selected[0]) & (final['cost'] <= cost_selected[1])
+    filter_ = (cost_liv['distance'] >= distance_selected[0]) & (cost_liv['distance'] <= distance_selected[1]) & (
+        cost_liv['cost'] >= cost_selected[0]) & (cost_liv['cost'] <= cost_selected[1])
 
     # add filter
-    final = final[filter_]
+    cost_liv = cost_liv[filter_]
 
     # table
     st.session_state.display_table = True
-    t = display_table(final.drop(columns=['latitude_city', 'longitude_city']))
+    t = display_table(cost_liv.drop(
+        columns=['distance', 'latitude_city', 'longitude_city']))
 
     # Lorem
     ault = []
@@ -95,18 +85,18 @@ def page_settings():
 
     # Lorem
     if len(ault) > 0:
-        final = final[final['city'].isin(ault)]
+        cost_liv = cost_liv[cost_liv['city'].isin(ault)]
         default_val = ault
     else:
-        default_val = list(final['city'].unique())
+        default_val = list(cost_liv['city'].unique())
         pass
 
     # Lorem
-    final = final.sort_values('deal', ascending=False).reset_index(drop=True)
-    lats = final['latitude_city'].tolist()
-    lons = final['longitude_city'].tolist()
-    city = final['city'].tolist()
-    cost = final['cost'].tolist()
+    # cost_liv = cost_liv.sort_values('deal', ascending=False).reset_index(drop=True)
+    lats = cost_liv['latitude_city'].tolist()
+    lons = cost_liv['longitude_city'].tolist()
+    city = cost_liv['city'].tolist()
+    cost = cost_liv['cost'].tolist()
 
     # Lorem
     OP = [51.9071833, 4.4728155]
@@ -130,36 +120,33 @@ def page_settings():
     map.add_child(feature_group)
 
     # add zoom
-    sw = final[['latitude_city', 'longitude_city']].min().values.tolist()
-    ne = final[['latitude_city', 'longitude_city']].max().values.tolist()
+    sw = cost_liv[['latitude_city', 'longitude_city']].min().values.tolist()
+    ne = cost_liv[['latitude_city', 'longitude_city']].max().values.tolist()
     map.fit_bounds([sw, ne])
     row1.write(map)
 
-    # Lorem
+    # Lorem 2
     st.title("Places to rent in The Netherlands")
 
     # read data
-    df_pararius = original.copy()
-
-    # read data
-    df_pararius = df_pararius[df_pararius['city'].isin(default_val)]
+    df_housing = df_housing[df_housing['city'].isin(default_val)]
 
     # Filter for price
-    max_price = (df_pararius['price'].max())
-    min_price = (df_pararius['price'].min())
+    max_price = (df_housing['price'].max())
+    min_price = (df_housing['price'].min())
 
     # Lorem
     row1, row2 = st.columns(2)
 
     # Filter for area
-    max_price = int(df_pararius['price'].max())
-    min_price = int(df_pararius['price'].min())
+    max_price = int(df_housing['price'].max())
+    min_price = int(df_housing['price'].min())
     price_selected = row2.slider(
         'Price', min_price, max_price, (min_price, max_price))
 
     # Filter for area
-    max_area = int(df_pararius['dimensions living area'].max())
-    min_area = int(df_pararius['dimensions living area'].min())
+    max_area = int(df_housing['dimensions living area'].max())
+    min_area = int(df_housing['dimensions living area'].min())
     area_selected = row2.slider(
         'Total Area', min_area, max_area, (0, max_area))
 
@@ -168,67 +155,66 @@ def page_settings():
 
     # Filter for Date
     with my_expander:
-        df_pararius["transfer offered since"] = pd.to_datetime(
-            df_pararius["transfer offered since"], format='%d-%m-%Y')
-        max_offered = (df_pararius["transfer offered since"].max())
-        min_offered = (df_pararius["transfer offered since"].min())
+        df_housing["transfer offered since"] = pd.to_datetime(
+            df_housing["transfer offered since"], format='%d-%m-%Y')
+        max_offered = (df_housing["transfer offered since"].max())
+        min_offered = (df_housing["transfer offered since"].min())
         d1 = st.date_input('Offered since', [min_offered, max_offered])
         min_offered = (pd.to_datetime(d1[0], format='%Y-%m-%d'))
         max_offered = (pd.to_datetime(d1[1], format='%Y-%m-%d'))
 
         # Filter for Date
-        df_pararius['transfer available'] = pd.to_datetime(
-            df_pararius['transfer available'], format='%d-%m-%Y')
-        max_available = (df_pararius['transfer available'].max())
-        min_available = (df_pararius['transfer available'].min())
+        df_housing['transfer available'] = pd.to_datetime(
+            df_housing['transfer available'], format='%d-%m-%Y')
+        max_available = (df_housing['transfer available'].max())
+        min_available = (df_housing['transfer available'].min())
         d2 = st.date_input('transfer available', [
-                           min_available, max_available])
+            min_available, max_available])
         min_available = (pd.to_datetime(d2[0], format='%Y-%m-%d'))
         max_available = (pd.to_datetime(d2[1], format='%Y-%m-%d'))
 
         # Filter for Date
         interior_selected = st.multiselect('transfer interior', options=list(
-            df_pararius['transfer interior'].unique()), default=list(df_pararius['transfer interior'].unique()))
+            df_housing['transfer interior'].unique()), default=list(df_housing['transfer interior'].unique()))
         status_selected = st.multiselect('transfer status', options=list(
-            df_pararius['transfer status'].unique()), default=list(df_pararius['transfer status'].unique()))
+            df_housing['transfer status'].unique()), default=list(df_housing['transfer status'].unique()))
 
         # Filter for Date
-        max_room = int(df_pararius['layout number of rooms'].max())
-        min_room = int(df_pararius['layout number of rooms'].min())
+        max_room = int(df_housing['layout number of rooms'].max())
+        min_room = int(df_housing['layout number of rooms'].min())
         room_selected = st.slider(
             'layout number of rooms', min_room, max_room, (min_room, max_room))
 
     # organize filter
-    filter_ = \
-        (df_pararius['transfer interior'].isin(interior_selected))\
-        & (df_pararius['transfer status'].isin(status_selected))\
-        & (df_pararius['price'] >= price_selected[0])\
-        & (df_pararius['price'] <= price_selected[1])\
-        & (df_pararius['dimensions living area'] >= area_selected[0])\
-        & (df_pararius['dimensions living area'] <= area_selected[1])\
-        & (df_pararius['layout number of rooms'] >= room_selected[0])\
-        & (df_pararius['layout number of rooms'] <= room_selected[1])\
-        & (df_pararius["transfer offered since"] >= min_offered)\
-        & (df_pararius["transfer offered since"] <= max_offered)\
-        & (df_pararius['transfer available'] >= min_available)\
-        & (df_pararius['transfer available'] <= max_available)\
+    filter_ = (df_housing['transfer interior'].isin(interior_selected))\
+        & (df_housing['transfer status'].isin(status_selected))\
+        & (df_housing['price'] >= price_selected[0])\
+        & (df_housing['price'] <= price_selected[1])\
+        & (df_housing['dimensions living area'] >= area_selected[0])\
+        & (df_housing['dimensions living area'] <= area_selected[1])\
+        & (df_housing['layout number of rooms'] >= room_selected[0])\
+        & (df_housing['layout number of rooms'] <= room_selected[1])\
+        & (df_housing["transfer offered since"] >= min_offered)\
+        & (df_housing["transfer offered since"] <= max_offered)\
+        & (df_housing['transfer available'] >= min_available)\
+        & (df_housing['transfer available'] <= max_available)\
 
     # apply filter
-    df_pararius = df_pararius[filter_]
+    df_housing = df_housing[filter_]
 
     # define order of best deal
-    df_pararius = df_pararius.sort_values(
+    df_housing = df_housing.sort_values(
         'deal', ascending=False).reset_index(drop=True)
 
     # Here I will tell how many I want to check
-    max_val = int(df_pararius.index.max())
-    min_val = int(df_pararius.index.min())
+    max_val = int(df_housing.index.max())
+    min_val = int(df_housing.index.min())
     index_selected = row2.slider(
         'Amout houses', min_val, max_val, (min_val, 10))
 
     # apply filter
-    good = df_pararius[(df_pararius.index >= index_selected[0]) & (
-        df_pararius.index <= index_selected[1])]
+    good = df_housing[(df_housing.index >= index_selected[0]) & (
+        df_housing.index <= index_selected[1])]
 
     callback = ('function (row) {'
                 "var marker = L.marker(new L.LatLng(row[0], row[1]), {color: 'blue'});"
@@ -268,7 +254,7 @@ def page_settings():
 
     # Lorem
     locations = list(zip(lats, lons, price, irl, area,
-                     rooms, garden, index, image))
+                         rooms, garden, index, image))
 
     # MAP
     pararius = folium.Map(OP, tiles='cartodbdark_matter')

@@ -1,26 +1,26 @@
 # Import Libs
 from folium.plugins import FastMarkerCluster
+from io import BytesIO
+from PIL import Image, ImageEnhance
+from pyxlsb import open_workbook as open_xlsb
 from st_aggrid import AgGrid, GridUpdateMode, GridOptionsBuilder
-import base64
 import folium
-import io
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-from PIL import Image, ImageEnhance
 
 
 def main():
     # create streamlit page
-    st.set_page_config(
-        layout='wide', page_title='ObviousPeopleApp', page_icon="🏠")
+    st.set_page_config(layout='wide')
 
     # config streamlit layout
-    hide_streamlit_style = """
-    <style>
-    .css-18e3th9 {padding: 1rem 5rem 10rem;}
-    </style>
-    """
+    hide_streamlit_style = \
+        """
+        <style>
+            .css-18e3th9 {padding: 1rem 5rem 10rem;}
+        </style>
+        """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
     page_settings()
 
@@ -33,9 +33,7 @@ def page_settings():
     st.title('Costs of Living')
 
     # read files
-    df_housing = pd.read_csv('df_housing_app.csv', index_col=[0])[
-        ['price', 'city', 'dimensions living area', 'transfer offered since', 'transfer available', 'transfer interior', 'transfer status', 'layout number of rooms', 'deal', 'latitude', 'longitude', 'url', 'img', 'outdoor garden', 'image']]
-
+    df_housing = pd.read_csv('df_housing_app.csv', index_col=[0])
     cost_liv = pd.read_csv('cost_living.csv', index_col=[0])
 
     # Lorem
@@ -75,7 +73,7 @@ def page_settings():
     # table
     st.session_state.display_table = True
     t = display_table(cost_liv.drop(
-        columns=['distance', 'latitude_city', 'longitude_city']))
+        columns=['latitude_city', 'longitude_city']))
 
     # Lorem
     ault = []
@@ -92,7 +90,6 @@ def page_settings():
         pass
 
     # Lorem
-    # cost_liv = cost_liv.sort_values('deal', ascending=False).reset_index(drop=True)
     lats = cost_liv['latitude_city'].tolist()
     lons = cost_liv['longitude_city'].tolist()
     city = cost_liv['city'].tolist()
@@ -287,19 +284,20 @@ def page_settings():
         'transfer available'
     ]].to_html(escape=False)
 
-    # prepare to download
-    towrite = io.BytesIO()
-    good.to_excel(towrite, encoding='utf-8', index=False, header=True)
-
-    # reset pointer
-    towrite.seek(0)
-
-    # some strings
-    b64 = base64.b64encode(towrite.read()).decode()
-    linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="obvious_people_houses.xlsx">Download excel file</a>'
+    # # prepare to download
+    def to_excel(df):
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        df.to_excel(writer, index=False, sheet_name='obvious_people')
+        workbook = writer.book
+        writer.save()
+        processed_data = output.getvalue()
+        return processed_data
     st.text(" \n")
-    st.markdown(linko, unsafe_allow_html=True)
-    st.text(" \n")
+    st.download_button(label='📥 Download Results',
+                       data=to_excel(
+                           good.drop(["latitude", "longitude", "img", "image"], 1)),
+                       file_name='house_results.xlsx')
     st.write(good_, unsafe_allow_html=True)
 
 

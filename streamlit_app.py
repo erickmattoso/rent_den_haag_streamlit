@@ -139,13 +139,13 @@ def page_settings():
     max_price = int(df_housing['price'].max())
     min_price = int(df_housing['price'].min())
     price_selected = row2.slider(
-        'Price', min_price, max_price, (min_price, max_price))
+        'Price', min_price, max_price, (min_price, 1111))
 
     # Filter for area
     max_area = int(df_housing['dimensions living area'].max())
     min_area = int(df_housing['dimensions living area'].min())
     area_selected = row2.slider(
-        'Total Area', min_area, max_area, (0, max_area))
+        'Total Area', min_area, max_area, (50, max_area))
 
     # Filter for interior
     my_expander = row2.expander(label='Advanced Filters')
@@ -296,7 +296,7 @@ def page_settings():
     st.text(" \n")
     st.download_button(label='📥 Download Results',
                        data=to_excel(
-                           good.drop(["latitude", "longitude", "img", "image"], 1)),
+                           good.drop(columns=["latitude", "longitude", "img", "image"])),
                        file_name='house_results.xlsx')
     st.write(good_, unsafe_allow_html=True)
 

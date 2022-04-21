@@ -342,7 +342,6 @@ def page_settings():
     ]]
 
     st.text("\n")
-    st.text("\n")
 
     table_display = display_table(good_, True, 975)
 

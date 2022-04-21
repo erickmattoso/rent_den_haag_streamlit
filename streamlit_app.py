@@ -79,7 +79,7 @@ def page_settings():
             gb.configure_column("img", cellRenderer=city_image_jscode)
 
             # adding city_image_jscode function into img column
-            gb.configure_column("url", cellRenderer=city_link_jscode)
+            # gb.configure_column("url", cellRenderer=city_link_jscode)
 
             # config size of row
             gb.configure_grid_options(rowHeight=90)
@@ -181,7 +181,7 @@ def page_settings():
     map.fit_bounds([sw, ne])
     row1.write(map)
 
-    # Second Part
+    ############ Second Part ############
     st.title("Places to rent in The Netherlands")
 
     # Filter for price
@@ -205,9 +205,8 @@ def page_settings():
 
     # Filter for interior
     my_expander = row2.expander(label='Advanced Filters')
-
-    # Filter for Date
     with my_expander:
+        # Offered since
         df_housing["transfer offered since"] = pd.to_datetime(
             df_housing["transfer offered since"], format='%d-%m-%Y')
         max_offered = (df_housing["transfer offered since"].max())
@@ -216,7 +215,7 @@ def page_settings():
         min_offered = (pd.to_datetime(d1[0], format='%Y-%m-%d'))
         max_offered = (pd.to_datetime(d1[1], format='%Y-%m-%d'))
 
-        # Filter for Date
+        # transfer available
         df_housing['transfer available'] = pd.to_datetime(
             df_housing['transfer available'], format='%d-%m-%Y')
         max_available = (df_housing['transfer available'].max())
@@ -226,13 +225,15 @@ def page_settings():
         min_available = (pd.to_datetime(d2[0], format='%Y-%m-%d'))
         max_available = (pd.to_datetime(d2[1], format='%Y-%m-%d'))
 
-        # Filter for Date
+        # transfer interior
         interior_selected = st.multiselect('transfer interior', options=list(
             df_housing['transfer interior'].unique()), default=list(df_housing['transfer interior'].unique()))
+
+        # transfer status
         status_selected = st.multiselect('transfer status', options=list(
             df_housing['transfer status'].unique()), default=list(df_housing['transfer status'].unique()))
 
-        # Filter for Date
+        # layout number of rooms
         max_room = int(df_housing['layout number of rooms'].max())
         min_room = int(df_housing['layout number of rooms'].min())
         room_selected = st.slider(
@@ -259,7 +260,7 @@ def page_settings():
     df_housing = df_housing.sort_values(
         'deal', ascending=False).reset_index(drop=True)
 
-    # Here I will tell how many I want to check
+    # Amout houses
     max_val = int(df_housing.index.max())
     min_val = int(df_housing.index.min())
     index_selected = row2.slider(
@@ -269,6 +270,7 @@ def page_settings():
     good = df_housing[(df_housing.index >= index_selected[0]) & (
         df_housing.index <= index_selected[1])]
 
+    # This callback actually add into the map these popup with details of the house
     callback = ('function (row) {'
                 "var marker = L.marker(new L.LatLng(row[0], row[1]), {color: 'blue'});"
                 "var popup = L.popup({maxWidth: '300'});"
@@ -294,7 +296,7 @@ def page_settings():
                 "marker.bindPopup(popup);"
                 'return marker};')
 
-    # prepare data to map
+    # transform into a list to display it in the map
     lats = good['latitude'].tolist()
     lons = good['longitude'].tolist()
     price = good['price'].tolist()
@@ -305,30 +307,30 @@ def page_settings():
     index = good.index.tolist()
     image = good['img'].tolist()
 
-    # Lorem
+    # transform into a single variable a list to display in the map
     locations = list(zip(lats, lons, price, irl, area,
-                         rooms, garden, index, image))
+                     rooms, garden, index, image))
 
     # MAP
-    pararius = folium.Map(OP, tiles='cartodbdark_matter')
+    housing_content = folium.Map(OP, tiles='cartodbdark_matter')
 
     # add zoom
     sw = good[['latitude', 'longitude']].min().values.tolist()
     ne = good[['latitude', 'longitude']].max().values.tolist()
-    pararius.fit_bounds([sw, ne])
+    housing_content.fit_bounds([sw, ne])
 
     # add data to map
     FastMarkerCluster(data=locations, name='good', callback=callback,
-                      show=True, tooltip='tooltip').add_to(pararius)
+                      show=True, tooltip='tooltip').add_to(housing_content)
     icon_url = 'https://raw.githubusercontent.com/erickmattoso/rent_den_haag_streamlit/main/obviouspeople.png'
     icon = folium.features.CustomIcon(icon_url, icon_size=(28, 30))
-    folium.Marker(location=OP, icon=icon).add_to(pararius)
-    folium.LayerControl().add_to(pararius)
+    folium.Marker(location=OP, icon=icon).add_to(housing_content)
+    folium.LayerControl().add_to(housing_content)
 
     # plot map on streamlit
-    row1.write(pararius)
+    row1.write(housing_content)
 
-    # plot data on streamlit
+    # filter columns of main dataframe
     good_ = good[[
         'img',
         'city',
@@ -336,13 +338,15 @@ def page_settings():
         'dimensions living area',
         'layout number of rooms',
         'outdoor garden',
-        "transfer offered since",
+        'transfer offered since',
         'transfer available',
         'url'
     ]]
 
+    # Adding space
     st.text("\n")
 
+    # AGgrid table
     table_display = display_table(good_, True, 975)
 
     # empty list
@@ -355,13 +359,14 @@ def page_settings():
     for i in range(amount):
         field_selected.append(table_display["selected_rows"][i]["url"])
 
-    # Lorem
+    # it will filter my DF based on the selected fields
     if len(field_selected) > 0:
         default_val = field_selected
     else:
         default_val = []
         pass
 
+    # Apply filter of selected rows to all my DFs
     good = good[good['url'].isin(default_val)]
 
     # prepare to download
@@ -374,9 +379,14 @@ def page_settings():
         processed_data = output.getvalue()
         return processed_data
 
+    # Button to download
     st.download_button(label='📥 Download Results',
                        data=to_excel(
-                           good.drop(columns=["latitude", "longitude", "img", "image"])),
+                           good.drop(
+                               columns=["latitude",
+                                        "longitude", "img", "image"]
+                           )
+                       ),
                        file_name='house_results.xlsx')
 
 

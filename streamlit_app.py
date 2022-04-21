@@ -3,7 +3,7 @@ from folium.plugins import FastMarkerCluster
 from io import BytesIO
 from PIL import Image, ImageEnhance
 from pyxlsb import open_workbook as open_xlsb
-from st_aggrid import AgGrid, GridUpdateMode, GridOptionsBuilder
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, JsCode
 import folium
 import pandas as pd
 import seaborn as sns
@@ -36,19 +36,70 @@ def page_settings():
     df_housing = pd.read_csv('df_housing_app.csv', index_col=[0])
     cost_liv = pd.read_csv('cost_living.csv', index_col=[0])
 
-    # Lorem
-    def display_table(df: pd.DataFrame) -> AgGrid:
+    # AGgrid table
+    def display_table(df, calm, size):
+
+        # transform df into AGgrid table
         gb = GridOptionsBuilder.from_dataframe(df)
+
+        # This add a clickable image when actioned
+        if calm == True:
+            # Adding image
+            city_image_jscode = JsCode("""
+                            function(params) {
+                                var element = document.createElement("span");
+                                var linkElement = document.createElement("a");
+                                var imgElement = document.createElement("img");
+                                imgElement.src = params.value;
+                                imgElement.height = 90;
+                                imgElement.width = 125;
+                                linkElement.href = params.data.url;
+                                linkElement.target = "_blank";
+                                linkElement.appendChild(imgElement);
+                                element.appendChild(linkElement);
+                                return element;
+                            };
+                            """)
+            # Adding clickable link
+            city_link_jscode = JsCode("""
+                            function(params) {
+                                var element = document.createElement("span");
+                                var linkElement = document.createElement("a");
+                                var linkText = document.createTextNode(params.value);
+                                link_url = params.value;
+                                linkElement.appendChild(linkText);
+                                linkText.title = params.value;
+                                linkElement.href = link_url;
+                                linkElement.target = "_blank";
+                                element.appendChild(linkElement);
+                                return element;
+                            };
+                            """)
+            # adding city_image_jscode function into img column
+            gb.configure_column("img", cellRenderer=city_image_jscode)
+
+            # adding city_image_jscode function into img column
+            gb.configure_column("url", cellRenderer=city_link_jscode)
+
+            # config size of row
+            gb.configure_grid_options(rowHeight=90)
+
+        # here I do not want add the above funtions into my aggrid table
+        else:
+            # just config the size
+            gb.configure_grid_options(rowHeight=30)
+
+        # General Config
         gb.configure_default_column(groupable=True, value=True, enableRowGroup=True,
                                     aggFunc='sum', editable=True, groupSelectsChildren=True, groupSelectsFiltered=True)
         gb.configure_selection('multiple', use_checkbox=True)
         gb.configure_pagination(enabled=True)
         gridOptions = gb.build()
-        main_grid_response = AgGrid(df, gridOptions=gridOptions, height=400,
+        main_grid_response = AgGrid(df, gridOptions=gridOptions, height=size,
                                     update_mode=GridUpdateMode.MODEL_CHANGED, allow_unsafe_jscode=True, fit_columns_on_grid_load=True)
         return main_grid_response
 
-    # positioning
+    # Divide into 2 columns
     row1, row2 = st.columns(2)
 
     # distance selected slider
@@ -70,38 +121,46 @@ def page_settings():
     # add filter
     cost_liv = cost_liv[filter_]
 
-    # table
-    st.session_state.display_table = True
-    t = display_table(cost_liv.drop(
-        columns=['latitude_city', 'longitude_city']))
+    # add space among map and table
+    st.text("\n")
 
-    # Lorem
-    ault = []
-    amount = len(t["selected_rows"])
+    # AGgrid table
+    AGgrid = display_table(cost_liv, False, 400)
+
+    # empty selected rows list
+    selected_rows = []
+
+    # length of selected rows on the table
+    amount = len(AGgrid["selected_rows"])
+
+    # save selected rows into a list
     for i in range(amount):
-        ault.append(t["selected_rows"][i]["city"])
+        selected_rows.append(AGgrid["selected_rows"][i]["city"])
 
-    # Lorem
-    if len(ault) > 0:
-        cost_liv = cost_liv[cost_liv['city'].isin(ault)]
-        default_val = ault
+    # it will filter my DF based on the selected fields
+    if len(selected_rows) > 0:
+        default_val = selected_rows.copy()
     else:
         default_val = list(cost_liv['city'].unique())
         pass
 
-    # Lorem
+    # Apply filter of selected rows to all my DFs
+    cost_liv = cost_liv[cost_liv['city'].isin(default_val)]
+    df_housing = df_housing[df_housing['city'].isin(default_val)]
+
+    # transform into a list to display it in the map
     lats = cost_liv['latitude_city'].tolist()
     lons = cost_liv['longitude_city'].tolist()
     city = cost_liv['city'].tolist()
     cost = cost_liv['cost'].tolist()
 
-    # Lorem
+    # Config map
     OP = [51.9071833, 4.4728155]
     map = folium.Map(OP, tiles='cartodbdark_matter')
     color_pallete = (sns.color_palette("YlOrBr", len(cost))).as_hex()
     feature_group = folium.FeatureGroup("Locations")
 
-    # Lorem
+    # add lists into map
     i = 0
     for lats, lons, cost, city in zip(lats, lons, cost, city):
         feature_group.add_child(folium.CircleMarker(
@@ -113,26 +172,23 @@ def page_settings():
             fill_opacity=1))
         i += 1
 
-    # Lorem
+    # display map
     map.add_child(feature_group)
 
-    # add zoom
+    # config of auto zoom map
     sw = cost_liv[['latitude_city', 'longitude_city']].min().values.tolist()
     ne = cost_liv[['latitude_city', 'longitude_city']].max().values.tolist()
     map.fit_bounds([sw, ne])
     row1.write(map)
 
-    # Lorem 2
+    # Second Part
     st.title("Places to rent in The Netherlands")
-
-    # read data
-    df_housing = df_housing[df_housing['city'].isin(default_val)]
 
     # Filter for price
     max_price = (df_housing['price'].max())
     min_price = (df_housing['price'].min())
 
-    # Lorem
+    # Divide into 2 columns
     row1, row2 = st.columns(2)
 
     # Filter for area
@@ -207,7 +263,7 @@ def page_settings():
     max_val = int(df_housing.index.max())
     min_val = int(df_housing.index.min())
     index_selected = row2.slider(
-        'Amout houses', min_val, max_val, (min_val, 10))
+        'Amout houses', min_val, max_val, (min_val, 9))
 
     # apply filter
     good = df_housing[(df_housing.index >= index_selected[0]) & (
@@ -274,17 +330,42 @@ def page_settings():
 
     # plot data on streamlit
     good_ = good[[
-        'image',
-        'price',
+        'img',
         'city',
+        'price',
         'dimensions living area',
         'layout number of rooms',
         'outdoor garden',
         "transfer offered since",
-        'transfer available'
-    ]].to_html(escape=False)
+        'transfer available',
+        'url'
+    ]]
 
-    # # prepare to download
+    st.text("\n")
+    st.text("\n")
+
+    table_display = display_table(good_, True, 975)
+
+    # empty list
+    field_selected = []
+
+    # length of display table
+    amount = len(table_display["selected_rows"])
+
+    # save into a list the selected fields
+    for i in range(amount):
+        field_selected.append(table_display["selected_rows"][i]["url"])
+
+    # Lorem
+    if len(field_selected) > 0:
+        default_val = field_selected
+    else:
+        default_val = []
+        pass
+
+    good = good[good['url'].isin(default_val)]
+
+    # prepare to download
     def to_excel(df):
         output = BytesIO()
         writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -293,12 +374,11 @@ def page_settings():
         writer.save()
         processed_data = output.getvalue()
         return processed_data
-    st.text(" \n")
+
     st.download_button(label='📥 Download Results',
                        data=to_excel(
                            good.drop(columns=["latitude", "longitude", "img", "image"])),
                        file_name='house_results.xlsx')
-    st.write(good_, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":

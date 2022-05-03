@@ -33,10 +33,17 @@ def page_settings():
     st.title('Costs of Living')
 
     # read files
-    df_housing = pd.read_csv('df_housing_app.csv', index_col=[0])
     cost_liv = pd.read_csv('cost_living.csv', index_col=[0])
+    df_housing = pd.read_csv('df_housing_app.csv', index_col=[0])
+    df_housing = df_housing.rename(columns={
+        "dimensions living area": "area",
+        "layout number of rooms": "rooms",
+        "transfer available": "available",
+        "transfer offered since": "offered"
+    })
 
     # AGgrid table
+
     def display_table(df, calm, size):
 
         # transform df into AGgrid table
@@ -125,7 +132,8 @@ def page_settings():
     st.text("\n")
 
     # AGgrid table
-    AGgrid = display_table(cost_liv, False, 400)
+    cost_liv_ = cost_liv.drop(columns=["latitude_city", "longitude_city"])
+    AGgrid = display_table(cost_liv_, False, 400)
 
     # empty selected rows list
     selected_rows = []
@@ -198,8 +206,8 @@ def page_settings():
         'Price', min_price, max_price, (min_price, 1111))
 
     # Filter for area
-    max_area = int(df_housing['dimensions living area'].max())
-    min_area = int(df_housing['dimensions living area'].min())
+    max_area = int(df_housing['area'].max())
+    min_area = int(df_housing['area'].min())
     area_selected = row2.slider(
         'Total Area', min_area, max_area, (50, max_area))
 
@@ -207,20 +215,20 @@ def page_settings():
     my_expander = row2.expander(label='Advanced Filters')
     with my_expander:
         # Offered since
-        df_housing["transfer offered since"] = pd.to_datetime(
-            df_housing["transfer offered since"], format='%d-%m-%Y')
-        max_offered = (df_housing["transfer offered since"].max())
-        min_offered = (df_housing["transfer offered since"].min())
+        df_housing["offered"] = pd.to_datetime(
+            df_housing["offered"], format='%d-%m-%Y')
+        max_offered = (df_housing["offered"].max())
+        min_offered = (df_housing["offered"].min())
         d1 = st.date_input('Offered since', [min_offered, max_offered])
         min_offered = (pd.to_datetime(d1[0], format='%Y-%m-%d'))
         max_offered = (pd.to_datetime(d1[1], format='%Y-%m-%d'))
 
-        # transfer available
-        df_housing['transfer available'] = pd.to_datetime(
-            df_housing['transfer available'], format='%d-%m-%Y')
-        max_available = (df_housing['transfer available'].max())
-        min_available = (df_housing['transfer available'].min())
-        d2 = st.date_input('transfer available', [
+        # available
+        df_housing['available'] = pd.to_datetime(
+            df_housing['available'], format='%d-%m-%Y')
+        max_available = (df_housing['available'].max())
+        min_available = (df_housing['available'].min())
+        d2 = st.date_input('available', [
             min_available, max_available])
         min_available = (pd.to_datetime(d2[0], format='%Y-%m-%d'))
         max_available = (pd.to_datetime(d2[1], format='%Y-%m-%d'))
@@ -233,25 +241,25 @@ def page_settings():
         status_selected = st.multiselect('transfer status', options=list(
             df_housing['transfer status'].unique()), default=list(df_housing['transfer status'].unique()))
 
-        # layout number of rooms
-        max_room = int(df_housing['layout number of rooms'].max())
-        min_room = int(df_housing['layout number of rooms'].min())
+        # rooms
+        max_room = int(df_housing['rooms'].max())
+        min_room = int(df_housing['rooms'].min())
         room_selected = st.slider(
-            'layout number of rooms', min_room, max_room, (min_room, max_room))
+            'rooms', min_room, max_room, (min_room, max_room))
 
     # organize filter
     filter_ = (df_housing['transfer interior'].isin(interior_selected))\
         & (df_housing['transfer status'].isin(status_selected))\
         & (df_housing['price'] >= price_selected[0])\
         & (df_housing['price'] <= price_selected[1])\
-        & (df_housing['dimensions living area'] >= area_selected[0])\
-        & (df_housing['dimensions living area'] <= area_selected[1])\
-        & (df_housing['layout number of rooms'] >= room_selected[0])\
-        & (df_housing['layout number of rooms'] <= room_selected[1])\
-        & (df_housing["transfer offered since"] >= min_offered)\
-        & (df_housing["transfer offered since"] <= max_offered)\
-        & (df_housing['transfer available'] >= min_available)\
-        & (df_housing['transfer available'] <= max_available)\
+        & (df_housing['area'] >= area_selected[0])\
+        & (df_housing['area'] <= area_selected[1])\
+        & (df_housing['rooms'] >= room_selected[0])\
+        & (df_housing['rooms'] <= room_selected[1])\
+        & (df_housing["offered"] >= min_offered)\
+        & (df_housing["offered"] <= max_offered)\
+        & (df_housing['available'] >= min_available)\
+        & (df_housing['available'] <= max_available)\
 
     # apply filter
     df_housing = df_housing[filter_]
@@ -301,8 +309,8 @@ def page_settings():
     lons = good['longitude'].tolist()
     price = good['price'].tolist()
     irl = good['url'].tolist()
-    area = good['dimensions living area'].tolist()
-    rooms = good['layout number of rooms'].tolist()
+    area = good['area'].tolist()
+    rooms = good['rooms'].tolist()
     garden = good['outdoor garden'].tolist()
     index = good.index.tolist()
     image = good['img'].tolist()
@@ -335,11 +343,11 @@ def page_settings():
         'img',
         'city',
         'price',
-        'dimensions living area',
-        'layout number of rooms',
+        'area',
+        'rooms',
         'outdoor garden',
-        'transfer offered since',
-        'transfer available',
+        'offered',
+        'available',
         'url'
     ]]
 
